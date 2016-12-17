@@ -6,7 +6,7 @@ output:
   pdf_document: default
 ---
 
-***An introduction for the Carlson Lab (and friends) to using R for oceanographic research.***
+# An introduction for the Carlson Lab (and friends) to using R for oceanographic research.#
 
 We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles,
 making maps, and anything else that might be useful.  
@@ -14,7 +14,7 @@ making maps, and anything else that might be useful.
 Before we start with that, let's take a few minutes to start with the basics for people that have never used R before...  
 First off, let's introduce you to entering data into R  
 
-**Values and Vectors**  
+### Values and Vectors
 You can store values, be they numbers or letters, and assign names to them.   
 As an example, let's create a series of names.  
 We will do this using the function **c()**, which combines values into a vector and save it as "x".  
@@ -82,7 +82,7 @@ x
 ```
 <br>  
 
-***Dataframes***  
+### Dataframes 
 If you are working with an observational dataset, such as cruise data, it will likely be in the form of a dataframe.  
 A dataframe is a collection of vectors identified by the a name. This is very similar to what you are likely used to works with excel spreadsheets.
 
@@ -106,7 +106,7 @@ We can now check the structure of our dataset by using the **str()** function wh
 str(df) # check structure of dataframe
 ```
 
-***Saving a dataframe***  
+### Saving a dataframe
 Suppose we want to save our dataframe so that we can either send it to a collaborator or open it in another program.  
 
 The easiest way is to save it as a .csv file.  
@@ -127,7 +127,7 @@ If we do not want to chnage our working directory an alternative approach is to 
 
 <br>  
 
-***Loading data***  
+### Loading data
 One of the easiest ways to load in a table of data is to use the function **read.table()**  
 
 Read in your file called "MyFirstDataframe.csv" and store it as 'data'.  
