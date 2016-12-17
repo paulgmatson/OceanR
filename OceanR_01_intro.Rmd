@@ -1,0 +1,144 @@
+---
+title: "OceanR: Intro to R"
+output:
+  html_notebook: default
+  html_document: default
+  pdf_document: default
+---
+
+***An introduction for the Carlson Lab (and friends) to using R for oceanographic research.***
+
+We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles,
+making maps, and anything else that might be useful.  
+
+Before we start with that, let's take a few minutes to start with the basics for people that have never used R before...  
+First off, let's introduce you to entering data into R  
+
+**Values and Vectors**  
+You can store values, be they numbers or letters, and assign names to them.   
+As an example, let's create a series of names.  
+We will do this using the function **c()**, which combines values into a vector and save it as "x".  
+These data are in the class 'character'.  
+Anything inside quotation marks "" is a string.  
+```{r}
+# create vector
+x <- c("Craig", "Mark", "Debora", "Alyson", "Uta")
+# print out vector
+x
+# check vector class
+class(x)
+```
+Next, let's create a vector of numbers, also called x.  
+Unlike the previous example, numbers aren't inside quotation marks.  
+This makes each of them a 'numeric', which can be used in mathmatical expressions.
+```{r}
+x <- c(1,2,3,4,5,6,7,8,9,10)
+x
+
+# check vector class
+class(x)
+
+# add up all the numbers
+sum(x)
+```
+<br>  
+What if you put the numbers in quotation marks?
+```{r}
+x <- c('1','2','3','4','5','6','7','8','9','10')
+x
+
+# check vector class
+class(x)
+
+# add up all the numbers
+y <- sum(x)
+y
+```
+This happened because we tried to do math on values that were stored as characters, which R will not do.  
+Whenever you are working with data, it is always good to check the class of the values to make sure they are in the correct format.   
+<br>
+
+If you are like me, you don't like entering in a lot of values individually such as creating a vector of depths.
+Here are a few tricks to make it easier
+```{r}
+# recreate a set of identical values
+x <- c(rep(10,10))
+x
+
+# create a sequence of values from 1 to 10 by 1
+x <- c(seq(1,10,1))
+x
+
+# create a sequence of values from 1 to 50 by 5
+x <- c(seq(0,51,5))
+x
+```
+
+We can also get fancy by combining multiple sequences to create a complex vector
+```{r}  
+# create vector
+x <- c(seq(0,1,0.1), seq(2,10,1), seq(20,100,10))
+x
+```
+<br>  
+
+***Dataframes***  
+If you are working with an observational dataset, such as cruise data, it will likely be in the form of a dataframe.  
+A dataframe is a collection of vectors identified by the a name. This is very similar to what you are likely used to works with excel spreadsheets.
+
+Let's start off by creating our dataset from a PnB cruise simulating a 100 m cast comprised of depth (0-100m), and two hypothetical parameters, paramA and paramB:
+
+```{r}
+# create a vector for the name of the cruise called "PnB"
+cruise <- c(rep("PnB",101))
+# create vector of depth
+depth <- c(seq(0,100))
+# create 101 randomn values of 'paramA' from values ranging between 0 and 10 
+paramA <- c(runif(101, min=0, max=10)) 
+# create 101 randomn values of 'paramB' from values ranging between 1 and 100 
+paramB <- c(sample(1:100,101, replace=TRUE)) 
+# combine the vectors into a dataframe and do not turn strings into factors
+df <- data.frame(cruise, depth, paramA, paramB, stringsAsFactors=FALSE) 
+```
+<br>   
+We can now check the structure of our dataset by using the **str()** function which will tell us the class of each of our vectors
+```{r}
+str(df) # check structure of dataframe
+```
+
+***Saving a dataframe***  
+Suppose we want to save our dataframe so that we can either send it to a collaborator or open it in another program.  
+
+The easiest way is to save it as a .csv file.  
+First, we need to figure out where it is going to be saved. The best way to do this is to check our working directory using the function **getwd()**  
+```{r}
+# get the working directory
+getwd()
+```
+If we want it to go somewhere else, we can either change the working directory using the function **setwd()**  
+<br>  
+Then we use the function **write.csv()** to create the file that will be saved in that directory
+```{r}
+# write a csv file
+write.csv(df, file = "MyFirstDataframe.csv", row.names=F) 
+```
+If we do not want to chnage our working directory an alternative approach is to specify the location of the file in its name such as  
+'file= "~/Users/paulmatson/tmp/MyFirstDataframe.csv"'  
+
+<br>  
+
+***Loading data***  
+One of the easiest ways to load in a table of data is to use the function **read.table()**  
+
+Read in your file called "MyFirstDataframe.csv" and store it as 'data'.  
+If the file is in your working directory, you only need to specify the name, otherwise you will need to provide the directory path to find it.
+```{r}
+# read in file and store as 'data'
+# the 'header' argument specifies where your file contains a header row
+# the 'sep' argument specifies how your values are separated; for .csv files a comma is used.
+data <- read.table("MyFirstDataframe.csv", header=TRUE, sep=",")
+```
+Now you should have the same dataframe stored as both 'df' and 'data'.
+
+
+
