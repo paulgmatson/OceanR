@@ -9,7 +9,7 @@ output:
 
 R is an incredibly versatile programing environment and people use it for a variety of applications. Our focus will be on developing the skills to integrate R into our own research analyses. We will be using real data whenever possible to help learn how to solve the problems that may come up along the way. This is a working group, not a lecture; it will be a collaborative effort, so be prepared to interact. But most of all, keep an open mind a have some fun with it!  
 <br>  
-![](Images/code_quality_2x_xkcd_1513.png)
+![](code_quality_2x_xkcd_1513.png)
 (from http://xkcd.com/1513)
 
 
