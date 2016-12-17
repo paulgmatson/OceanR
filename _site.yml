@@ -1,0 +1,15 @@
+name: "OceanR Tutorial"
+navbar:
+  title: "HOME"
+  left:
+    - text: "Intro to R"
+      href: OceanR_01_intro.html
+    - text: "Working with real data"
+      href: OceanR_02_realdata.html
+output_dir: "."
+output:
+  html_document:
+    theme: yeti
+    highlight: textmate
+#    include:
+#      after_body: _footer.html

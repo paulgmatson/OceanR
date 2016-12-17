@@ -1,9 +1,7 @@
 ---
-title: "OceanR: Intro to R"
+title: 'OceanR: Intro to R'
 output:
-  html_notebook: default
   html_document: default
-  pdf_document: default
 ---
 
 # An introduction for the Carlson Lab (and friends) to using R for oceanographic research.#
@@ -50,10 +48,9 @@ x
 # check vector class
 class(x)
 
-# add up all the numbers
-y <- sum(x)
-y
 ```
+It didn't work, did it?  
+
 This happened because we tried to do math on values that were stored as characters, which R will not do.  
 Whenever you are working with data, it is always good to check the class of the values to make sure they are in the correct format.   
 <br>

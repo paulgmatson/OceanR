@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>OceanR: Intro to R</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">HOME</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="OceanR_01_intro.html">Intro to R</a>
+</li>
+<li>
+  <a href="OceanR_02_realdata.html">Working with real data</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">OceanR: Intro to R</h1>
+
+</div>
+
+
+<div id="an-introduction-for-the-carlson-lab-and-friends-to-using-r-for-oceanographic-research." class="section level1">
+<h1>An introduction for the Carlson Lab (and friends) to using R for oceanographic research.</h1>
+<p>We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.</p>
+<p>Before we start with that, let’s take a few minutes to start with the basics for people that have never used R before…<br />
+First off, let’s introduce you to entering data into R</p>
+<div id="values-and-vectors" class="section level3">
+<h3>Values and Vectors</h3>
+<p>You can store values, be they numbers or letters, and assign names to them.<br />
+As an example, let’s create a series of names.<br />
+We will do this using the function <strong>c()</strong>, which combines values into a vector and save it as “x”.<br />
+These data are in the class ‘character’.<br />
+Anything inside quotation marks “” is a string.</p>
+<pre class="r"><code># create vector
+x &lt;- c(&quot;Craig&quot;, &quot;Mark&quot;, &quot;Debora&quot;, &quot;Alyson&quot;, &quot;Uta&quot;)
+# print out vector
+x</code></pre>
+<pre><code>## [1] &quot;Craig&quot;  &quot;Mark&quot;   &quot;Debora&quot; &quot;Alyson&quot; &quot;Uta&quot;</code></pre>
+<pre class="r"><code># check vector class
+class(x)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Next, let’s create a vector of numbers, also called x.<br />
+Unlike the previous example, numbers aren’t inside quotation marks.<br />
+This makes each of them a ‘numeric’, which can be used in mathmatical expressions.</p>
+<pre class="r"><code>x &lt;- c(1,2,3,4,5,6,7,8,9,10)
+x</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<pre class="r"><code># check vector class
+class(x)</code></pre>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<pre class="r"><code># add up all the numbers
+sum(x)</code></pre>
+<pre><code>## [1] 55</code></pre>
+<p><br><br />
+What if you put the numbers in quotation marks?</p>
+<pre class="r"><code>x &lt;- c(&#39;1&#39;,&#39;2&#39;,&#39;3&#39;,&#39;4&#39;,&#39;5&#39;,&#39;6&#39;,&#39;7&#39;,&#39;8&#39;,&#39;9&#39;,&#39;10&#39;)
+x</code></pre>
+<pre><code>##  [1] &quot;1&quot;  &quot;2&quot;  &quot;3&quot;  &quot;4&quot;  &quot;5&quot;  &quot;6&quot;  &quot;7&quot;  &quot;8&quot;  &quot;9&quot;  &quot;10&quot;</code></pre>
+<pre class="r"><code># check vector class
+class(x)</code></pre>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>It didn’t work, did it?</p>
+<p>This happened because we tried to do math on values that were stored as characters, which R will not do.<br />
+Whenever you are working with data, it is always good to check the class of the values to make sure they are in the correct format.<br />
+<br></p>
+<p>If you are like me, you don’t like entering in a lot of values individually such as creating a vector of depths. Here are a few tricks to make it easier</p>
+<pre class="r"><code># recreate a set of identical values
+x &lt;- c(rep(10,10))
+x</code></pre>
+<pre><code>##  [1] 10 10 10 10 10 10 10 10 10 10</code></pre>
+<pre class="r"><code># create a sequence of values from 1 to 10 by 1
+x &lt;- c(seq(1,10,1))
+x</code></pre>
+<pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
+<pre class="r"><code># create a sequence of values from 1 to 50 by 5
+x &lt;- c(seq(0,51,5))
+x</code></pre>
+<pre><code>##  [1]  0  5 10 15 20 25 30 35 40 45 50</code></pre>
+<p>We can also get fancy by combining multiple sequences to create a complex vector</p>
+<pre class="r"><code># create vector
+x &lt;- c(seq(0,1,0.1), seq(2,10,1), seq(20,100,10))
+x</code></pre>
+<pre><code>##  [1]   0.0   0.1   0.2   0.3   0.4   0.5   0.6   0.7   0.8   0.9   1.0
+## [12]   2.0   3.0   4.0   5.0   6.0   7.0   8.0   9.0  10.0  20.0  30.0
+## [23]  40.0  50.0  60.0  70.0  80.0  90.0 100.0</code></pre>
+<p><br></p>
+</div>
+<div id="dataframes" class="section level3">
+<h3>Dataframes</h3>
+<p>If you are working with an observational dataset, such as cruise data, it will likely be in the form of a dataframe.<br />
+A dataframe is a collection of vectors identified by the a name. This is very similar to what you are likely used to works with excel spreadsheets.</p>
+<p>Let’s start off by creating our dataset from a PnB cruise simulating a 100 m cast comprised of depth (0-100m), and two hypothetical parameters, paramA and paramB:</p>
+<pre class="r"><code># create a vector for the name of the cruise called &quot;PnB&quot;
+cruise &lt;- c(rep(&quot;PnB&quot;,101))
+# create vector of depth
+depth &lt;- c(seq(0,100))
+# create 101 randomn values of &#39;paramA&#39; from values ranging between 0 and 10 
+paramA &lt;- c(runif(101, min=0, max=10)) 
+# create 101 randomn values of &#39;paramB&#39; from values ranging between 1 and 100 
+paramB &lt;- c(sample(1:100,101, replace=TRUE)) 
+# combine the vectors into a dataframe and do not turn strings into factors
+df &lt;- data.frame(cruise, depth, paramA, paramB, stringsAsFactors=FALSE) </code></pre>
+<p><br><br />
+We can now check the structure of our dataset by using the <strong>str()</strong> function which will tell us the class of each of our vectors</p>
+<pre class="r"><code>str(df) # check structure of dataframe</code></pre>
+<pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
+##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
+##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
+##  $ paramA: num  0.0189 9.0528 7.9872 3.4331 8.1071 ...
+##  $ paramB: int  49 48 39 72 70 83 66 19 46 66 ...</code></pre>
+</div>
+<div id="saving-a-dataframe" class="section level3">
+<h3>Saving a dataframe</h3>
+<p>Suppose we want to save our dataframe so that we can either send it to a collaborator or open it in another program.</p>
+<p>The easiest way is to save it as a .csv file.<br />
+First, we need to figure out where it is going to be saved. The best way to do this is to check our working directory using the function <strong>getwd()</strong></p>
+<pre class="r"><code># get the working directory
+getwd()</code></pre>
+<pre><code>## [1] &quot;/Users/pmatson/Dropbox/OceanR&quot;</code></pre>
+<p>If we want it to go somewhere else, we can either change the working directory using the function <strong>setwd()</strong><br />
+<br><br />
+Then we use the function <strong>write.csv()</strong> to create the file that will be saved in that directory</p>
+<pre class="r"><code># write a csv file
+write.csv(df, file = &quot;MyFirstDataframe.csv&quot;, row.names=F) </code></pre>
+<p>If we do not want to chnage our working directory an alternative approach is to specify the location of the file in its name such as<br />
+‘file= “~/Users/paulmatson/tmp/MyFirstDataframe.csv”’</p>
+<p><br></p>
+</div>
+<div id="loading-data" class="section level3">
+<h3>Loading data</h3>
+<p>One of the easiest ways to load in a table of data is to use the function <strong>read.table()</strong></p>
+<p>Read in your file called “MyFirstDataframe.csv” and store it as ‘data’.<br />
+If the file is in your working directory, you only need to specify the name, otherwise you will need to provide the directory path to find it.</p>
+<pre class="r"><code># read in file and store as &#39;data&#39;
+# the &#39;header&#39; argument specifies where your file contains a header row
+# the &#39;sep&#39; argument specifies how your values are separated; for .csv files a comma is used.
+data &lt;- read.table(&quot;MyFirstDataframe.csv&quot;, header=TRUE, sep=&quot;,&quot;)</code></pre>
+<p>Now you should have the same dataframe stored as both ‘df’ and ‘data’.</p>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

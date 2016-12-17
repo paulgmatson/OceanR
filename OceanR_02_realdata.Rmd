@@ -1,9 +1,7 @@
 ---
 title: 'OceanR: Playing with a real dataset'
 output:
-  html_notebook: default
   html_document: default
-  pdf_document: default
 ---
 As much fun as it is to make up our own data, we are now going to start working with a real dataset.  
 
@@ -34,17 +32,17 @@ Next we can load in our data file. It is good practice to look at your datafile 
 
 What do we notice about the formatting?
 
-Let's try reading it in as a csv file
+First try reading it in using ***read.table()***
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 # read in BATS bottle file (attempt 1)
-raw <- read.table("BATS_bottle.txt")
+# raw <- read.table("BATS_bottle.txt")
 ```
 
 Failure. Looking back at the screenshot, did you notice how we really don't get to any of the actual data until a ways down the file? What we are seeing is primarily metadata that is very useful for understanding the dataset, but is not needed for looking at the data in R. Fortunately, we can tell R to skip over those lines (58 of them!) and only read in the data that we want using the *skip* argument in the **read.table()** function.  
-
+This will look something like below, without the # of course...
 ```{r}
 # read in BATS bottle file (attempt 3)
-raw <- read.table("BATS_bottle.txt", skip=58, header=FALSE )
+# raw <- read.table("BATS_bottle.txt", skip=58, header=FALSE )
 ```
 
 No success here either! The problem seems to be in the way that this file is formatted, in which the header row containing the value names has a funky fort with both tab and commas while the data is tab-separated. Weird, right?  
