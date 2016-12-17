@@ -26,7 +26,8 @@ options(stringsAsFactors=FALSE)
 getwd()
 ```
 
-Next we can load in our data file. It is good practice to look at your datafile in TextEdit or a similar program prior to loading into R to check for potential issues with data format.
+Next we can load in our data file. We are going to work with data from the Bermuda Atlantic Time Series ([BATS](http://bats.bios.edu/)) site. Specifically, we will begin using the datafile 'BATS_bottle.txt' which you should have available via my github site. Otherwise, you can find it [here](http://batsftp.bios.edu/BATS/bottle/bats_bottle.txt); you can copy and paste it into a .txt file and save it in your directory.  
+It is good practice to look at your datafile in TextEdit or a similar program prior to loading into R to check for potential issues with data format.
 
 ![](screenshot of BATS dataset.png)
 
