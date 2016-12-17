@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>OceanR: Playing with a real dataset</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">HOME</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="OceanR_01_intro.html">Intro to R</a>
+</li>
+<li>
+  <a href="OceanR_02_realdata.html">Working with real data</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">OceanR: Playing with a real dataset</h1>
+
+</div>
+
+
+<p>As much fun as it is to make up our own data, we are now going to start working with a real dataset.</p>
+<p>To do this, we will begin by working with a script file. This allows us to save all of the lines of code that we create so we can easily modify it when needed.</p>
+<p>It is good practice to first begin your script by indicating the name of the script, what is does, when it was created and by whom. Additionally, it is good to make sure that you start with a clean R environment so that you don’t accidently use incorrect values (more on this later).</p>
+<div id="comments" class="section level2">
+<h2>Comments</h2>
+<p>You probably noticed how some of the code that we have looked at has ‘#’ in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the script. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven’t used the script in a long time.</p>
+<p>Here is an example of how to start your script…</p>
+<pre class="r"><code># BATS_load_data.R
+# This script loads BATS data into R
+# Created by ----, on day/month/year
+
+# clear out the R environment of any stored values
+rm(list=ls())
+# Force R to avoid storing strings as factors when uploading data
+options(stringsAsFactors=FALSE)
+# display working directory
+getwd()</code></pre>
+<pre><code>## [1] &quot;/Users/pmatson/Dropbox/OceanR&quot;</code></pre>
+<p>Next we can load in our data file. It is good practice to look at your datafile in TextEdit or a similar program prior to loading into R to check for potential issues with data format.</p>
+<div class="figure">
+<img src="screenshot%20of%20BATS%20dataset.png" />
+
+</div>
+<p>What do we notice about the formatting?</p>
+<p>First try reading it in using <strong><em>read.table()</em></strong></p>
+<p>Failure. Looking back at the screenshot, did you notice how we really don’t get to any of the actual data until a ways down the file? What we are seeing is primarily metadata that is very useful for understanding the dataset, but is not needed for looking at the data in R. Fortunately, we can tell R to skip over those lines (58 of them!) and only read in the data that we want using the <em>skip</em> argument in the <strong>read.table()</strong> function.<br />
+This will look something like below, without the # of course…</p>
+<pre class="r"><code># read in BATS bottle file (attempt 3)
+# raw &lt;- read.table(&quot;BATS_bottle.txt&quot;, skip=58, header=FALSE )</code></pre>
+<p>No success here either! The problem seems to be in the way that this file is formatted, in which the header row containing the value names has a funky fort with both tab and commas while the data is tab-separated. Weird, right?</p>
+<p>Let’s add one more line to our <em>skip</em> argument to remove this wacky header line and try again.</p>
+<pre class="r"><code># read in BATS bottle file (attempt 4)
+raw &lt;- read.table(&quot;BATS_bottle.txt&quot;, skip=59, header=FALSE )
+str(raw)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    46421 obs. of  34 variables:
+##  $ V1 : num  1e+09 1e+09 1e+09 1e+09 1e+09 ...
+##  $ V2 : int  19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 ...
+##  $ V3 : num  1989 1989 1989 1989 1989 ...
+##  $ V4 : int  2230 2230 2230 2230 2230 2230 2230 2230 2230 2230 ...
+##  $ V5 : num  31.8 31.8 31.8 31.8 31.8 ...
+##  $ V6 : num  64.1 64.1 64.1 64.1 64.1 ...
+##  $ V7 : num  2000 2200 2399 2600 2802 ...
+##  $ V8 : num  3.82 3.58 3.32 3.13 2.93 ...
+##  $ V9 : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V10: num  35 35 -999 35 34.9 ...
+##  $ V11: num  27.8 27.8 -999 27.9 27.9 ...
+##  $ V12: num  256 257 -999 259 261 ...
+##  $ V13: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V14: num  -53.2 -53.7 -999 -54.7 -54.6 -54 -55.5 -999 -58.2 -999 ...
+##  $ V15: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V16: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V17: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V18: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V19: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V20: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V21: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V22: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V23: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V24: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V25: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V26: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V27: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V28: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V29: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V30: num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V31: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V32: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V33: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ V34: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...</code></pre>
+<p>FINALLY!!! If you were doing this for the first time, you could have sat at this hurdle for a long time! This is a really great example of how you sometimes need to use a problem-solving approach when working with code.</p>
+<p>Now that we have our data in here, we need to add back our header so we know what each vector refers to in the dataframe.</p>
+<pre class="r"><code># create a vector containing the names that we need in our header
+header &lt;- c(&quot;Id&quot;,&quot;yyyymmdd&quot;,&quot;decy&quot;,&quot;time&quot;,&quot;latN&quot;,&quot;lonW&quot;,&quot;Depth&quot;,&quot;Temp&quot;, 
+            &quot;CTD_S&quot;,&quot;Sal1&quot;,&quot;Sig_th&quot;,&quot;O2_1&quot;,&quot;OxFix&quot;,&quot;Anom1&quot;,&quot;CO2&quot;,&quot;Alk&quot;,
+            &quot;NO3&quot;,&quot;NO2&quot;,&quot;PO4&quot;,&quot;Si&quot;,&quot;POC&quot;,&quot;PON&quot;,&quot;TOC&quot;,&quot;TN&quot;,&quot;Bac&quot;,&quot;POP&quot;,
+            &quot;TDP&quot;,&quot;SRP&quot;,&quot;BSi&quot;,&quot;LSi&quot;,&quot;Pro&quot;,&quot;Syn&quot;,&quot;Piceu&quot;,&quot;Naneu&quot;)
+# put header names into column names
+colnames(raw) &lt;- header 
+# check structure
+str(raw)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    46421 obs. of  34 variables:
+##  $ Id      : num  1e+09 1e+09 1e+09 1e+09 1e+09 ...
+##  $ yyyymmdd: int  19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 ...
+##  $ decy    : num  1989 1989 1989 1989 1989 ...
+##  $ time    : int  2230 2230 2230 2230 2230 2230 2230 2230 2230 2230 ...
+##  $ latN    : num  31.8 31.8 31.8 31.8 31.8 ...
+##  $ lonW    : num  64.1 64.1 64.1 64.1 64.1 ...
+##  $ Depth   : num  2000 2200 2399 2600 2802 ...
+##  $ Temp    : num  3.82 3.58 3.32 3.13 2.93 ...
+##  $ CTD_S   : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Sal1    : num  35 35 -999 35 34.9 ...
+##  $ Sig_th  : num  27.8 27.8 -999 27.9 27.9 ...
+##  $ O2_1    : num  256 257 -999 259 261 ...
+##  $ OxFix   : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Anom1   : num  -53.2 -53.7 -999 -54.7 -54.6 -54 -55.5 -999 -58.2 -999 ...
+##  $ CO2     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Alk     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ NO3     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ NO2     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ PO4     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Si      : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ POC     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ PON     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ TOC     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ TN      : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Bac     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ POP     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ TDP     : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ SRP     : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ BSi     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ LSi     : num  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Pro     : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Syn     : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Piceu   : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
+##  $ Naneu   : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...</code></pre>
+<p>The next step is to make the data a little more user friendly. Did you notice all of the values labeled ‘-999’ that showed up in the structure function? They represent observations in which no data was collected for that particular variable. If we used them in their current state, any mathematical calculations would be messed up. The solution? Convert them to ‘NA’ values.</p>
+<p>Whenever you are going to be altering your dataset (hopefully in a positive fashion!) it is good to store the new version under a different name. This way you can easily compare the new version to the original and see how it was changed. Again, we want to run <strong>str()</strong> to see the structure of our dataframe.</p>
+<pre class="r"><code># store raw dataframe under new name
+data &lt;- raw
+# convert all values of &#39;-999&#39; to &#39;NA&#39; in the dataframe &#39;data&#39;
+data[data == -999] &lt;- NA
+# check the dataframe structure
+str(data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    46421 obs. of  34 variables:
+##  $ Id      : num  1e+09 1e+09 1e+09 1e+09 1e+09 ...
+##  $ yyyymmdd: int  19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 ...
+##  $ decy    : num  1989 1989 1989 1989 1989 ...
+##  $ time    : int  2230 2230 2230 2230 2230 2230 2230 2230 2230 2230 ...
+##  $ latN    : num  31.8 31.8 31.8 31.8 31.8 ...
+##  $ lonW    : num  64.1 64.1 64.1 64.1 64.1 ...
+##  $ Depth   : num  2000 2200 2399 2600 2802 ...
+##  $ Temp    : num  3.82 3.58 3.32 3.13 2.93 ...
+##  $ CTD_S   : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Sal1    : num  35 35 NA 35 34.9 ...
+##  $ Sig_th  : num  27.8 27.8 NA 27.9 27.9 ...
+##  $ O2_1    : num  256 257 NA 259 261 ...
+##  $ OxFix   : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Anom1   : num  -53.2 -53.7 NA -54.7 -54.6 -54 -55.5 NA -58.2 NA ...
+##  $ CO2     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO2     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Si      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POC     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PON     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TOC     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TN      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Bac     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POP     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP     : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP     : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro     : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn     : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu   : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu   : int  NA NA NA NA NA NA NA NA NA NA ...</code></pre>
+<p>We should also have a quick look to see if there are any other weird values showing up in our dataframe. One way to do this is to use the <strong>summary()</strong> function, which will calculate basic statistics describing the distribution of values for each vector.</p>
+<pre class="r"><code># check for any other weird values in dataframe
+summary(data)</code></pre>
+<pre><code>##        Id               yyyymmdd             decy           time     
+##  Min.   :1.000e+09   Min.   :19881020   Min.   :1989   Min.   :   0  
+##  1st Qu.:1.013e+09   1st Qu.:19971209   1st Qu.:1998   1st Qu.: 835  
+##  Median :1.022e+09   Median :20060718   Median :2007   Median :1343  
+##  Mean   :1.113e+09   Mean   :20039676   Mean   :2004   Mean   :1307  
+##  3rd Qu.:1.027e+09   3rd Qu.:20100309   3rd Qu.:2010   3rd Qu.:1750  
+##  Max.   :3.022e+09   Max.   :20141213   Max.   :2015   Max.   :2359  
+##                                                                      
+##       latN            lonW           Depth             Temp      
+##  Min.   :24.76   Min.   :60.45   Min.   :   0.3   Min.   : 0.00  
+##  1st Qu.:31.65   1st Qu.:64.16   1st Qu.:  20.6   1st Qu.:18.23  
+##  Median :31.67   Median :64.17   Median : 100.4   Median :19.48  
+##  Mean   :31.67   Mean   :64.17   Mean   : 427.9   Mean   :18.30  
+##  3rd Qu.:31.69   3rd Qu.:64.19   3rd Qu.: 298.8   3rd Qu.:21.55  
+##  Max.   :35.67   Max.   :66.17   Max.   :8587.0   Max.   :31.79  
+##                                                   NA&#39;s   :136    
+##      CTD_S            Sal1           Sig_th           O2_1      
+##  Min.   :34.87   Min.   :34.88   Min.   :22.90   Min.   :  2.9  
+##  1st Qu.:36.43   1st Qu.:34.99   1st Qu.:25.62   1st Qu.:202.8  
+##  Median :36.59   Median :36.26   Median :26.16   Median :219.6  
+##  Mean   :36.35   Mean   :35.86   Mean   :26.03   Mean   :221.7  
+##  3rd Qu.:36.66   3rd Qu.:36.62   3rd Qu.:26.43   3rd Qu.:256.1  
+##  Max.   :37.90   Max.   :37.03   Max.   :27.91   Max.   :597.8  
+##  NA&#39;s   :2599    NA&#39;s   :33951   NA&#39;s   :847     NA&#39;s   :33370  
+##      OxFix           Anom1              CO2             Alk       
+##  Min.   : 2.00   Min.   :-232.30   Min.   :2000    Min.   :2302   
+##  1st Qu.:16.60   1st Qu.: -63.70   1st Qu.:2061    1st Qu.:2388   
+##  Median :19.00   Median : -43.75   Median :2077    Median :2393   
+##  Mean   :18.51   Mean   : -40.27   Mean   :2077    Mean   :2391   
+##  3rd Qu.:21.50   3rd Qu.:  -3.70   3rd Qu.:2094    3rd Qu.:2398   
+##  Max.   :29.70   Max.   :  39.20   Max.   :2180    Max.   :2426   
+##  NA&#39;s   :2625    NA&#39;s   :33129     NA&#39;s   :41719   NA&#39;s   :43017  
+##       NO3             NO2             PO4              Si       
+##  Min.   : 0.00   Min.   :0.00    Min.   :0.00    Min.   : 0.00  
+##  1st Qu.: 0.36   1st Qu.:0.00    1st Qu.:0.01    1st Qu.: 0.86  
+##  Median : 5.92   Median :0.01    Median :0.25    Median : 2.31  
+##  Mean   : 9.53   Mean   :0.03    Mean   :0.60    Mean   : 8.94  
+##  3rd Qu.:18.38   3rd Qu.:0.04    3rd Qu.:1.24    3rd Qu.:14.40  
+##  Max.   :28.37   Max.   :0.36    Max.   :2.16    Max.   :48.43  
+##  NA&#39;s   :33846   NA&#39;s   :43294   NA&#39;s   :34087   NA&#39;s   :33784  
+##       POC              PON             TOC              TN       
+##  Min.   :  0.23   Min.   : 0.00   Min.   :39.60   Min.   : 2.6   
+##  1st Qu.:  7.55   1st Qu.: 1.28   1st Qu.:43.70   1st Qu.: 4.7   
+##  Median : 15.00   Median : 2.67   Median :52.00   Median : 6.8   
+##  Mean   : 17.53   Mean   : 3.11   Mean   :52.96   Mean   :11.7   
+##  3rd Qu.: 24.70   3rd Qu.: 4.46   3rd Qu.:61.30   3rd Qu.:20.7   
+##  Max.   :135.72   Max.   :35.77   Max.   :73.70   Max.   :28.0   
+##  NA&#39;s   :39550    NA&#39;s   :39505   NA&#39;s   :40070   NA&#39;s   :41512  
+##       Bac             POP               TDP              SRP        
+##  Min.   : 0.00   Min.   :   0.00   Min.   :   0.0   Min.   :  0.00  
+##  1st Qu.: 1.00   1st Qu.:   0.00   1st Qu.:  71.0   1st Qu.:  2.00  
+##  Median : 2.80   Median :   0.01   Median : 108.0   Median : 12.50  
+##  Mean   : 3.08   Mean   :  14.15   Mean   : 135.5   Mean   : 38.44  
+##  3rd Qu.: 4.80   3rd Qu.:   0.02   3rd Qu.: 171.0   3rd Qu.: 61.00  
+##  Max.   :15.00   Max.   :9814.30   Max.   :1081.0   Max.   :500.00  
+##  NA&#39;s   :40243   NA&#39;s   :44091     NA&#39;s   :44897    NA&#39;s   :44787   
+##       BSi              LSi             Pro              Syn        
+##  Min.   :  0.00   Min.   : 0.00   Min.   :     0   Min.   :     0  
+##  1st Qu.:  6.75   1st Qu.: 2.05   1st Qu.:  1914   1st Qu.:   222  
+##  Median : 10.57   Median : 4.02   Median : 16483   Median :  5876  
+##  Mean   : 17.79   Mean   : 5.15   Mean   : 29811   Mean   :  8623  
+##  3rd Qu.: 17.75   3rd Qu.: 6.61   3rd Qu.: 45962   3rd Qu.: 12820  
+##  Max.   :630.25   Max.   :56.19   Max.   :260659   Max.   :130474  
+##  NA&#39;s   :42227    NA&#39;s   :44953   NA&#39;s   :44007    NA&#39;s   :43984   
+##      Piceu             Naneu        
+##  Min.   :    0.0   Min.   :   0.00  
+##  1st Qu.:  203.5   1st Qu.:   3.00  
+##  Median :  645.0   Median :   7.00  
+##  Mean   : 1171.9   Mean   :  95.52  
+##  3rd Qu.: 1326.5   3rd Qu.: 114.00  
+##  Max.   :22513.0   Max.   :1295.00  
+##  NA&#39;s   :44310     NA&#39;s   :44573</code></pre>
+<p>OK, everything looks good here.<br />
+<br></p>
+<p>Now let’s try splitting up values to make new data columns</p>
+<p>If you remember back to the metadata from BATS_bottle.txt, the first column ‘Id’ is a unique bottle identifier that contains many useful pieces of information. It states:<br />
+Id = Sample Id<br />
+A unique bottle id which identifies cruise, cast, and Nisken number<br />
+9 digit number !####$$$@@, where,<br />
+! =Cruise type, 1=BATS core, 2=BATS Bloom a, and 3=BATS Bloom b,<br />
+#### =Cruise number<br />
+$ $ $ =Cast number, 1-80=CTD casts, 81-99=Hydrocasts (i.e. 83 = Data from Hydrocast number 3)<br />
+@@ =Niskin number<br />
+e.g. 1004800410 is BATS core 48, cast 4, Niskin 10</p>
+<p><br></p>
+<p>Let’s split up Id into mutliple columns to that we can better use this metadata. To identify a column in a data frame, we use a <strong>$</strong> followed by the column name (for example, data$Id). Next, we will use the function <strong>substr()</strong> to subdivide the string found in data$Id. To use this function, we need to specify the column that we are dividing (data$Id), the character we are starting at (the first), and the character we are ending at (also the first). This will allow us to create a value from the first character in each Id value.<br />
+<strong>NOTE</strong>: this only works for character strings, not for numeric values. Check the value’s class if there are any issues.</p>
+<pre class="r"><code># create new column for dataframe &#39;data&#39;
+data$cruise.type &lt;- substr(data$Id, 1, 1)  
+# check structure
+str(data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    46421 obs. of  35 variables:
+##  $ Id         : num  1e+09 1e+09 1e+09 1e+09 1e+09 ...
+##  $ yyyymmdd   : int  19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 ...
+##  $ decy       : num  1989 1989 1989 1989 1989 ...
+##  $ time       : int  2230 2230 2230 2230 2230 2230 2230 2230 2230 2230 ...
+##  $ latN       : num  31.8 31.8 31.8 31.8 31.8 ...
+##  $ lonW       : num  64.1 64.1 64.1 64.1 64.1 ...
+##  $ Depth      : num  2000 2200 2399 2600 2802 ...
+##  $ Temp       : num  3.82 3.58 3.32 3.13 2.93 ...
+##  $ CTD_S      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Sal1       : num  35 35 NA 35 34.9 ...
+##  $ Sig_th     : num  27.8 27.8 NA 27.9 27.9 ...
+##  $ O2_1       : num  256 257 NA 259 261 ...
+##  $ OxFix      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Anom1      : num  -53.2 -53.7 NA -54.7 -54.6 -54 -55.5 NA -58.2 NA ...
+##  $ CO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Si         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POC        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PON        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TOC        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TN         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Bac        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POP        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type: chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...</code></pre>
+<p>Now let’s further separate the data from data$Id</p>
+<pre class="r"><code># create column for &#39;cruise&#39;
+data$cruise &lt;- substr(data$Id, 2,5)
+# create vector for &#39;cast&#39;
+data$cast &lt;- substr(data$Id, 6,8)
+# create vector for &#39;bottle&#39;
+data$bottle &lt;- substr(data$Id, 9,10)
+# check structure
+str(data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    46421 obs. of  38 variables:
+##  $ Id         : num  1e+09 1e+09 1e+09 1e+09 1e+09 ...
+##  $ yyyymmdd   : int  19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 ...
+##  $ decy       : num  1989 1989 1989 1989 1989 ...
+##  $ time       : int  2230 2230 2230 2230 2230 2230 2230 2230 2230 2230 ...
+##  $ latN       : num  31.8 31.8 31.8 31.8 31.8 ...
+##  $ lonW       : num  64.1 64.1 64.1 64.1 64.1 ...
+##  $ Depth      : num  2000 2200 2399 2600 2802 ...
+##  $ Temp       : num  3.82 3.58 3.32 3.13 2.93 ...
+##  $ CTD_S      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Sal1       : num  35 35 NA 35 34.9 ...
+##  $ Sig_th     : num  27.8 27.8 NA 27.9 27.9 ...
+##  $ O2_1       : num  256 257 NA 259 261 ...
+##  $ OxFix      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Anom1      : num  -53.2 -53.7 NA -54.7 -54.6 -54 -55.5 NA -58.2 NA ...
+##  $ CO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Si         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POC        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PON        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TOC        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TN         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Bac        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POP        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type: chr  &quot;1&quot; &quot;1&quot; &quot;1&quot; &quot;1&quot; ...
+##  $ cruise     : chr  &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; ...
+##  $ cast       : chr  &quot;001&quot; &quot;001&quot; &quot;001&quot; &quot;001&quot; ...
+##  $ bottle     : chr  &quot;12&quot; &quot;11&quot; &quot;10&quot; &quot;09&quot; ...</code></pre>
+<div id="awesome-now-we-can-start-exploring-our-data" class="section level3">
+<h3>Awesome! Now we can start exploring our data!</h3>
+</div>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
