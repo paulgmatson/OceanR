@@ -7,7 +7,9 @@ output:
 
 ***Welcome to the Carlson Lab's OceanR workgroup for learning to use R for your oceanographic research. We will be meeting semi-regularly to help you get acquainted with using R and the wide area of things that it can do for you.***  
 
-R is an incredibly versatile programing environment and people use it for a variety of applications. Our focus will be on developing the skills to integrate R into our own research analyses. We will be using real data whenever possible to help learn how to solve the problems that may come up along the way. This is a working group, not a lecture; it will be a collaborative effort, so be prepared to interact. But most of all, keep an open mind a have some fun with it!  
+R is an incredibly versatile programing environment and people use it for a variety of applications. Our focus will be on developing the skills to integrate R into our own research analyses. We will be using real data whenever possible to help learn how to solve the problems that may come up along the way.   
+<br>  
+Just like life, coding in R becomes easier the more you practice. None of us are experts and we all have a lot that we can learn from each other. This is a working group, not a lecture; it will be a collaborative effort, so be prepared to interact. But most of all, keep an open mind a have some fun with it!  
 <br>  
 ![](code_quality_2x_xkcd_1513.png)
 (from http://xkcd.com/1513)
