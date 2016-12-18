@@ -298,12 +298,12 @@ div.tocify {
 
 <p>We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.</p>
 <p>Before we start with that, let’s take a few minutes to start with the basics for people that have never used R before. First off, let’s introduce you to entering data into R.</p>
-<div id="comments" class="section level3">
-<h3>Comments</h3>
+<div id="comments" class="section level2">
+<h2>Comments</h2>
 <p>You will soon notice how some of the code that we have looked at has ‘#’ in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven’t used the script in a long time. It is in your best interests to make this a habit…you will appreciate it later!</p>
 </div>
-<div id="values-and-vectors" class="section level3">
-<h3>Values and Vectors</h3>
+<div id="values-and-vectors" class="section level2">
+<h2>Values and Vectors</h2>
 <p>You can store values, be they numbers or letters, and assign names to them.<br />
 As an example, let’s create a series of names.<br />
 We will do this using the function <strong>c()</strong>, which combines values into a vector and save it as “x”.<br />
@@ -363,8 +363,8 @@ x</code></pre>
 ## [23]  40.0  50.0  60.0  70.0  80.0  90.0 100.0</code></pre>
 <p><br></p>
 </div>
-<div id="dataframes" class="section level3">
-<h3>Dataframes</h3>
+<div id="dataframes" class="section level2">
+<h2>Dataframes</h2>
 <p>If you are working with an observational dataset, such as cruise data, it will likely be in the form of a dataframe.<br />
 A dataframe is a collection of vectors identified by the a name. This is very similar to what you are likely used to works with excel spreadsheets.</p>
 <p>Let’s start off by creating our dataset from a PnB cruise simulating a 100 m cast comprised of depth (0-100m), and two hypothetical parameters, paramA and paramB:</p>
@@ -384,11 +384,11 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  3.459 0.761 5.539 1.541 3.369 ...
-##  $ paramB: int  15 64 99 47 47 5 78 2 79 94 ...</code></pre>
+##  $ paramA: num  3.04 9.78 9.29 7.67 4.64 ...
+##  $ paramB: int  76 7 65 4 26 19 33 49 8 5 ...</code></pre>
 </div>
-<div id="saving-a-dataframe" class="section level3">
-<h3>Saving a dataframe</h3>
+<div id="saving-a-dataframe" class="section level2">
+<h2>Saving a dataframe</h2>
 <p>Suppose we want to save our dataframe so that we can either send it to a collaborator or open it in another program.</p>
 <p>The easiest way is to save it as a .csv file.<br />
 First, we need to figure out where it is going to be saved. The best way to do this is to check our working directory using the function <strong>getwd()</strong></p>
@@ -404,8 +404,8 @@ write.csv(df, file = &quot;MyFirstDataframe.csv&quot;, row.names=F) </code></pre
 ‘file= “~/Users/paulmatson/tmp/MyFirstDataframe.csv”’</p>
 <p><br></p>
 </div>
-<div id="loading-data" class="section level3">
-<h3>Loading data</h3>
+<div id="loading-data" class="section level2">
+<h2>Loading data</h2>
 <p>One of the easiest ways to load in a table of data is to use the function <strong>read.table()</strong></p>
 <p>Read in your file called “MyFirstDataframe.csv” and store it as ‘data’.<br />
 If the file is in your working directory, you only need to specify the name, otherwise you will need to provide the directory path to find it.</p>
