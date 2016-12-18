@@ -15,12 +15,15 @@
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/default.css" rel="stylesheet" />
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-1.1/highlight.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -97,34 +100,34 @@ button.code-folding-btn:focus {
 <style type="text/css">
 /* padding for bootstrap navbar */
 body {
-  padding-top: 51px;
+  padding-top: 45px;
   padding-bottom: 40px;
 }
 /* offset scroll position for anchor links (for fixed navbar)  */
 .section h1 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 50px;
+  margin-top: -50px;
 }
 
 .section h2 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 50px;
+  margin-top: -50px;
 }
 .section h3 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 50px;
+  margin-top: -50px;
 }
 .section h4 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 50px;
+  margin-top: -50px;
 }
 .section h5 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 50px;
+  margin-top: -50px;
 }
 .section h6 {
-  padding-top: 56px;
-  margin-top: -56px;
+  padding-top: 50px;
+  margin-top: -50px;
 }
 </style>
 
@@ -159,6 +162,101 @@ $(document).ready(function () {
 <!-- code folding -->
 
 
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -198,16 +296,15 @@ $(document).ready(function () {
 </div>
 
 
-<p>As much fun as it is to make up our own data, we are now going to start working with a real dataset.</p>
-<p>To do this, we will begin by working with a script file. This allows us to save all of the lines of code that we create so we can easily modify it when needed.</p>
-<p>It is good practice to first begin your script by indicating the name of the script, what is does, when it was created and by whom. Additionally, it is good to make sure that you start with a clean R environment so that you don’t accidently use incorrect values (more on this later).</p>
-<div id="comments" class="section level2">
-<h2>Comments</h2>
-<p>You probably noticed how some of the code that we have looked at has ‘#’ in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the script. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven’t used the script in a long time.</p>
+<p>Now that you have run through the basics, let’s start messing around with some real data. While R can be run straight from the console using single command line coding, but there is a better way!</p>
+<div id="using-scripts" class="section level2">
+<h2>Using Scripts</h2>
+<p>Scripts are files (ending in “.R”) that allow us to save all of the lines of code that we create so we can easily modify it when needed. We are going start by creating a new script.</p>
+<p>It is good practice to first begin your script by indicating the name of the script, what is does, when it was created, and by whom. Additionally, it is good to make sure that you start with a clean R environment so that you don’t accidently use incorrect values (more on this later).</p>
 <p>Here is an example of how to start your script…</p>
 <pre class="r"><code># BATS_load_data.R
 # This script loads BATS data into R
-# Created by ----, on day/month/year
+# Created by Paul, on 17 Dec 2016
 
 # clear out the R environment of any stored values
 rm(list=ls())
@@ -216,6 +313,9 @@ options(stringsAsFactors=FALSE)
 # display working directory
 getwd()</code></pre>
 <pre><code>## [1] &quot;/Users/pmatson/Dropbox/OceanR&quot;</code></pre>
+</div>
+<div id="loading-data" class="section level2">
+<h2>Loading Data</h2>
 <p>Next we can load in our data file. We are going to work with data from the Bermuda Atlantic Time Series (<a href="http://bats.bios.edu/">BATS</a>) site. Specifically, we will begin using the datafile ‘BATS_bottle.txt’ which you should have available via my github site. Otherwise, you can find it <a href="http://batsftp.bios.edu/BATS/bottle/bats_bottle.txt">here</a>; you can copy and paste it into a .txt file and save it in your directory.<br />
 It is good practice to look at your datafile in TextEdit or a similar program prior to loading into R to check for potential issues with data format.</p>
 <div class="figure">
@@ -269,6 +369,9 @@ str(raw)</code></pre>
 ##  $ V33: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
 ##  $ V34: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...</code></pre>
 <p>FINALLY!!! If you were doing this for the first time, you could have sat at this hurdle for a long time! This is a really great example of how you sometimes need to use a problem-solving approach when working with code.</p>
+</div>
+<div id="adding-a-header" class="section level2">
+<h2>Adding a header</h2>
 <p>Now that we have our data in here, we need to add back our header so we know what each vector refers to in the dataframe.</p>
 <pre class="r"><code># create a vector containing the names that we need in our header
 header &lt;- c(&quot;Id&quot;,&quot;yyyymmdd&quot;,&quot;decy&quot;,&quot;time&quot;,&quot;latN&quot;,&quot;lonW&quot;,&quot;Depth&quot;,&quot;Temp&quot;, 
@@ -314,6 +417,9 @@ str(raw)</code></pre>
 ##  $ Syn     : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
 ##  $ Piceu   : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
 ##  $ Naneu   : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...</code></pre>
+</div>
+<div id="replacing-values" class="section level2">
+<h2>Replacing values</h2>
 <p>The next step is to make the data a little more user friendly. Did you notice all of the values labeled ‘-999’ that showed up in the structure function? They represent observations in which no data was collected for that particular variable. If we used them in their current state, any mathematical calculations would be messed up. The solution? Convert them to ‘NA’ values.</p>
 <p>Whenever you are going to be altering your dataset (hopefully in a positive fashion!) it is good to store the new version under a different name. This way you can easily compare the new version to the original and see how it was changed. Again, we want to run <strong>str()</strong> to see the structure of our dataframe.</p>
 <pre class="r"><code># store raw dataframe under new name
@@ -434,6 +540,9 @@ summary(data)</code></pre>
 ##  NA&#39;s   :44310     NA&#39;s   :44573</code></pre>
 <p>OK, everything looks good here.<br />
 <br></p>
+</div>
+<div id="creating-new-columns-from-old-columns" class="section level2">
+<h2>Creating new columns from old columns</h2>
 <p>Now let’s try splitting up values to make new data columns</p>
 <p>If you remember back to the metadata from BATS_bottle.txt, the first column ‘Id’ is a unique bottle identifier that contains many useful pieces of information. It states:<br />
 Id = Sample Id<br />
@@ -535,13 +644,13 @@ str(data)</code></pre>
 ##  $ cruise     : chr  &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; &quot;0001&quot; ...
 ##  $ cast       : chr  &quot;001&quot; &quot;001&quot; &quot;001&quot; &quot;001&quot; ...
 ##  $ bottle     : chr  &quot;12&quot; &quot;11&quot; &quot;10&quot; &quot;09&quot; ...</code></pre>
-<div id="awesome-now-we-can-start-exploring-our-data" class="section level3">
-<h3>Awesome! Now we can start exploring our data!</h3>
-</div>
+<p><strong>Awesome! Now we can start exploring our data!</strong></p>
 </div>
 
 
 
+</div>
+</div>
 
 </div>
 

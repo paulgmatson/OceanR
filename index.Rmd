@@ -1,8 +1,8 @@
 ---
 title: 
 output: 
-  html_document: default
-
+  html_document:
+    theme: yeti
 ---
 
 ### Welcome to the Carlson Lab's OceanR workgroup for learning to use R for your oceanographic research. We will be meeting semi-regularly to help you get acquainted with using R and explore the wide range of things that it can do for you.
@@ -11,8 +11,8 @@ R is an incredibly versatile programing environment and people use it for a vari
 
 Just like life, coding in R becomes easier the more you practice and there are many ways to reach your goal. This is intended to be a working group, not a lecture; it will be a collaborative effort, so be prepared to interact. None of us are experts and we all have a lot that we can learn from each other. Most of all, keep an open mind and have some fun with it!  
 
-![](code_quality_2x_xkcd_1513.png)
-(from http://xkcd.com/1513)
+<center><img src="code_quality_2x_xkcd_1513.png" width="800px"></center>
+<figcaption><center>(from http://xkcd.com/1513)</center>
 
 
 
