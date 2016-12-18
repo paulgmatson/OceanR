@@ -10,7 +10,7 @@ We will be using real oceanographic datasets to learn various skills, such as ma
 
 Before we start with that, let's take a few minutes to start with the basics for people that have never used R before. First off, let's introduce you to entering data into R.    
 
-## Comments 
+### Comments 
 You will soon notice how some of the code that we have looked at has '#' in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven't used the script in a long time. It is in your best interests to make this a habit...you will appreciate it later!
 
 ### Values and Vectors

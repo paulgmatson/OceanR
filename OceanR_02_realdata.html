@@ -297,8 +297,8 @@ div.tocify {
 
 
 <p>Now that you have run through the basics, let’s start messing around with some real data. While R can be run straight from the console using single command line coding, but there is a better way!</p>
-<div id="using-scripts" class="section level2">
-<h2>Using Scripts</h2>
+<div id="using-scripts" class="section level3">
+<h3>Using Scripts</h3>
 <p>Scripts are files (ending in “.R”) that allow us to save all of the lines of code that we create so we can easily modify it when needed. We are going start by creating a new script.</p>
 <p>It is good practice to first begin your script by indicating the name of the script, what is does, when it was created, and by whom. Additionally, it is good to make sure that you start with a clean R environment so that you don’t accidently use incorrect values (more on this later).</p>
 <p>Here is an example of how to start your script…</p>
@@ -314,8 +314,8 @@ options(stringsAsFactors=FALSE)
 getwd()</code></pre>
 <pre><code>## [1] &quot;/Users/pmatson/Dropbox/OceanR&quot;</code></pre>
 </div>
-<div id="loading-data" class="section level2">
-<h2>Loading Data</h2>
+<div id="loading-data" class="section level3">
+<h3>Loading Data</h3>
 <p>Next we can load in our data file. We are going to work with data from the Bermuda Atlantic Time Series (<a href="http://bats.bios.edu/">BATS</a>) site. Specifically, we will begin using the datafile ‘BATS_bottle.txt’ which you should have available via my github site. Otherwise, you can find it <a href="http://batsftp.bios.edu/BATS/bottle/bats_bottle.txt">here</a>; you can copy and paste it into a .txt file and save it in your directory.<br />
 It is good practice to look at your datafile in TextEdit or a similar program prior to loading into R to check for potential issues with data format.</p>
 <div class="figure">
@@ -370,8 +370,8 @@ str(raw)</code></pre>
 ##  $ V34: int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...</code></pre>
 <p>FINALLY!!! If you were doing this for the first time, you could have sat at this hurdle for a long time! This is a really great example of how you sometimes need to use a problem-solving approach when working with code.</p>
 </div>
-<div id="adding-a-header" class="section level2">
-<h2>Adding a header</h2>
+<div id="adding-a-header" class="section level3">
+<h3>Adding a header</h3>
 <p>Now that we have our data in here, we need to add back our header so we know what each vector refers to in the dataframe.</p>
 <pre class="r"><code># create a vector containing the names that we need in our header
 header &lt;- c(&quot;Id&quot;,&quot;yyyymmdd&quot;,&quot;decy&quot;,&quot;time&quot;,&quot;latN&quot;,&quot;lonW&quot;,&quot;Depth&quot;,&quot;Temp&quot;, 
@@ -418,8 +418,8 @@ str(raw)</code></pre>
 ##  $ Piceu   : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...
 ##  $ Naneu   : int  -999 -999 -999 -999 -999 -999 -999 -999 -999 -999 ...</code></pre>
 </div>
-<div id="replacing-values" class="section level2">
-<h2>Replacing values</h2>
+<div id="replacing-values" class="section level3">
+<h3>Replacing values</h3>
 <p>The next step is to make the data a little more user friendly. Did you notice all of the values labeled ‘-999’ that showed up in the structure function? They represent observations in which no data was collected for that particular variable. If we used them in their current state, any mathematical calculations would be messed up. The solution? Convert them to ‘NA’ values.</p>
 <p>Whenever you are going to be altering your dataset (hopefully in a positive fashion!) it is good to store the new version under a different name. This way you can easily compare the new version to the original and see how it was changed. Again, we want to run <strong>str()</strong> to see the structure of our dataframe.</p>
 <pre class="r"><code># store raw dataframe under new name
@@ -541,8 +541,8 @@ summary(data)</code></pre>
 <p>OK, everything looks good here.<br />
 <br></p>
 </div>
-<div id="creating-new-columns-from-old-columns" class="section level2">
-<h2>Creating new columns from old columns</h2>
+<div id="creating-new-columns-from-old-columns" class="section level3">
+<h3>Creating new columns from old columns</h3>
 <p>Now let’s try splitting up values to make new data columns</p>
 <p>If you remember back to the metadata from BATS_bottle.txt, the first column ‘Id’ is a unique bottle identifier that contains many useful pieces of information. It states:<br />
 Id = Sample Id<br />

@@ -298,9 +298,10 @@ div.tocify {
 
 <p>We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.</p>
 <p>Before we start with that, let’s take a few minutes to start with the basics for people that have never used R before. First off, let’s introduce you to entering data into R.</p>
-<div id="comments" class="section level2">
-<h2>Comments</h2>
+<div id="comments" class="section level3">
+<h3>Comments</h3>
 <p>You will soon notice how some of the code that we have looked at has ‘#’ in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven’t used the script in a long time. It is in your best interests to make this a habit…you will appreciate it later!</p>
+</div>
 <div id="values-and-vectors" class="section level3">
 <h3>Values and Vectors</h3>
 <p>You can store values, be they numbers or letters, and assign names to them.<br />
@@ -383,8 +384,8 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  4.46 2.18 2.16 2.66 6.09 ...
-##  $ paramB: int  10 49 36 98 91 42 64 81 79 26 ...</code></pre>
+##  $ paramA: num  3.459 0.761 5.539 1.541 3.369 ...
+##  $ paramB: int  15 64 99 47 47 5 78 2 79 94 ...</code></pre>
 </div>
 <div id="saving-a-dataframe" class="section level3">
 <h3>Saving a dataframe</h3>
@@ -413,7 +414,6 @@ If the file is in your working directory, you only need to specify the name, oth
 # the &#39;sep&#39; argument specifies how your values are separated; for .csv files a comma is used.
 data &lt;- read.table(&quot;MyFirstDataframe.csv&quot;, header=TRUE, sep=&quot;,&quot;)</code></pre>
 <p>Now you should have the same dataframe stored as both ‘df’ and ‘data’.</p>
-</div>
 </div>
 
 

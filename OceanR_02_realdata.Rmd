@@ -7,7 +7,7 @@ output:
 ---
 Now that you have run through the basics, let's start messing around with some real data. While R can be run straight from the console using single command line coding, but there is a better way!
 
-## Using Scripts
+### Using Scripts
 Scripts are files (ending in ".R") that allow us to save all of the lines of code that we create so we can easily modify it when needed. We are going start by creating a new script. 
 
 It is good practice to first begin your script by indicating the name of the script, what is does, when it was created, and by whom. Additionally, it is good to make sure that you start with a clean R environment so that you don't accidently use incorrect values (more on this later).  
@@ -26,7 +26,7 @@ options(stringsAsFactors=FALSE)
 getwd()
 ```
 
-## Loading Data  
+### Loading Data  
 Next we can load in our data file. We are going to work with data from the Bermuda Atlantic Time Series ([BATS](http://bats.bios.edu/)) site. Specifically, we will begin using the datafile 'BATS_bottle.txt' which you should have available via my github site. Otherwise, you can find it [here](http://batsftp.bios.edu/BATS/bottle/bats_bottle.txt); you can copy and paste it into a .txt file and save it in your directory.  
 It is good practice to look at your datafile in TextEdit or a similar program prior to loading into R to check for potential issues with data format.
 
@@ -59,7 +59,7 @@ str(raw)
 
 FINALLY!!! If you were doing this for the first time, you could have sat at this hurdle for a long time! This is a really great example of how you sometimes need to use a problem-solving approach when working with code.  
 
-## Adding a header  
+### Adding a header  
 Now that we have our data in here, we need to add back our header so we know what each vector refers to in the dataframe.  
 
 ```{r}
@@ -74,7 +74,7 @@ colnames(raw) <- header
 str(raw)
 ```
 
-## Replacing values  
+### Replacing values  
 The next step is to make the data a little more user friendly. Did you notice all of the values labeled '-999' that showed up in the structure function? They represent observations in which no data was collected for that particular variable. If we used them in their current state, any mathematical calculations would be messed up. The solution? Convert them to 'NA' values.
 
 Whenever you are going to be altering your dataset (hopefully in a positive fashion!) it is good to store the new version under a different name. This way you can easily compare the new version to the original and see how it was changed. Again, we want to run **str()** to see the structure of our dataframe.
@@ -97,7 +97,7 @@ summary(data)
 OK, everything looks good here.  
  <br>  
 
-## Creating new columns from old columns 
+### Creating new columns from old columns 
 Now let's try splitting up values to make new data columns  
 
 If you remember back to the metadata from BATS_bottle.txt, the first column 'Id' is a unique bottle identifier that contains many useful pieces of information. It states:  
