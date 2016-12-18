@@ -1,12 +1,11 @@
 ---
-title: 
+title: 'Introduction to R'
 output:
   html_document:
     toc: true
     toc_float: true
 ---
 
-### Introduction to R
 We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.   
 
 Before we start with that, let's take a few minutes to start with the basics for people that have never used R before. First off, let's introduce you to entering data into R.    
