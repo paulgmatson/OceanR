@@ -300,6 +300,9 @@ div.tocify {
 <p>We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.</p>
 <p>Before we start with that, let’s take a few minutes to start with the basics for people that have never used R before. First off, let’s introduce you to entering data into R.</p>
 </div>
+<div id="comments" class="section level2">
+<h2>Comments</h2>
+<p>You will soon notice how some of the code that we have looked at has ‘#’ in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven’t used the script in a long time. It is in your best interests to make this a habit…you will appreciate it later!</p>
 <div id="values-and-vectors" class="section level3">
 <h3>Values and Vectors</h3>
 <p>You can store values, be they numbers or letters, and assign names to them.<br />
@@ -382,8 +385,8 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  3.58 4.38 2.28 1.13 1.06 ...
-##  $ paramB: int  52 66 56 31 94 7 66 14 93 51 ...</code></pre>
+##  $ paramA: num  9.424 0.154 6.719 1.259 6.383 ...
+##  $ paramB: int  97 94 98 83 67 15 92 11 30 31 ...</code></pre>
 </div>
 <div id="saving-a-dataframe" class="section level3">
 <h3>Saving a dataframe</h3>
@@ -412,6 +415,7 @@ If the file is in your working directory, you only need to specify the name, oth
 # the &#39;sep&#39; argument specifies how your values are separated; for .csv files a comma is used.
 data &lt;- read.table(&quot;MyFirstDataframe.csv&quot;, header=TRUE, sep=&quot;,&quot;)</code></pre>
 <p>Now you should have the same dataframe stored as both ‘df’ and ‘data’.</p>
+</div>
 </div>
 
 
