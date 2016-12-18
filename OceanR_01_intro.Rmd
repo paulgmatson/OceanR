@@ -6,11 +6,9 @@ output:
 
 # An introduction for the Carlson Lab (and friends) to using R for oceanographic research.#
 
-We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles,
-making maps, and anything else that might be useful.  
+We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.   
 
-Before we start with that, let's take a few minutes to start with the basics for people that have never used R before...  
-First off, let's introduce you to entering data into R  
+Before we start with that, let's take a few minutes to start with the basics for people that have never used R before. First off, let's introduce you to entering data into R.    
 
 ### Values and Vectors
 You can store values, be they numbers or letters, and assign names to them.   
