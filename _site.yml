@@ -6,6 +6,8 @@ navbar:
       href: OceanR_01_intro.html
     - text: "Working with real data"
       href: OceanR_02_realdata.html
+    - text: "Manipulating Data: Part 1"
+      href: OceanR_03_manipulate1.html
 output_dir: "."
 output:
   html_document:

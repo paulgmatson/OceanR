@@ -279,9 +279,6 @@ div.tocify {
 <li>
   <a href="OceanR_02_realdata.html">Working with real data</a>
 </li>
-<li>
-  <a href="OceanR_03_manipulate1.html">Manipulating Data (1)</a>
-</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -303,8 +300,8 @@ div.tocify {
 <p>Before we get started, let’s open up the dataframe that we saved at the end of the last module.</p>
 <pre class="r"><code># open data file
 data &lt;- read.table(&quot;OceanR_BATS_data.csv&quot;, header=TRUE, sep=&quot;,&quot;)</code></pre>
-<div id="looking-att-our-data" class="section level2">
-<h2>Looking att our data</h2>
+<div id="looking-at-our-data" class="section level2">
+<h2>Looking at our data</h2>
 <p>We already have used the <strong>str()</strong> function to look at our dataframe’s structure (formating). Let’s go over a few helpful functions that will tell us more about what values are within our dataset.</p>
 <p>You can open up your entire dataframe in R Studio by clicking on the file in the Environment window. This will open it up in the source window (top left in R studio). You can also type in the name of your dataframe in the console, but be aware that R will print the <em>ENTIRE</em> dataframe so that may really suck for you if it is really long (try it if you don’t believe me).</p>
 <p>Another more efficient way is to just look at a selection of the first few rows by using the function <strong>head()</strong>. You can control the number of rows by putting a number in the second argument. YOu can look at the last few rows using the function <strong>tail()</strong>.</p>
@@ -649,6 +646,10 @@ max.temp.list[[&quot;300&quot;]]</code></pre>
 max(data[data$cruise==&quot;300&quot;,&quot;Temp&quot;], na.rm=T)</code></pre>
 <pre><code>## [1] 22.871</code></pre>
 <p>Now, lists are not perfect for everything. One problem they have is that they only work properly if every element can be successfully passed through the function. Not to burst your bubble, but that is not always the case.</p>
+</div>
+<div id="for-loops" class="section level2">
+<h2>For Loops</h2>
+<p>For loops are a fun alternative to lists for passing separate chunks of data through a function.</p>
 </div>
 
 
