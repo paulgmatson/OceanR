@@ -1,0 +1,117 @@
+---
+title: "Manipulating Data Part 1"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+Now that you have prepared your dataframe, it is time to learn how to begin manipulating it.  
+
+Before we get started, let's open up the dataframe that we saved at the end of the last module.  
+```{r}
+# open data file
+data <- read.table("OceanR_BATS_data.csv", header=TRUE, sep=",")
+```
+
+
+## Looking at our data
+We already have used the **str()** function to look at our dataframe's structure (formating). Let's go over a few helpful functions that will tell us more about what values are within our dataset.  
+
+You can open up your entire dataframe in R Studio by clicking on the file in the Environment window. This will open it up in the source window (top left in R studio). You can also type in the name of your dataframe in the console, but be aware that R will print the *ENTIRE* dataframe so that may really suck for you if it is really long (try it if you don't believe me).  
+
+Another more efficient way is to just look at a selection of the first few rows by using the function **head()**. You can control the number of rows by putting a number in the second argument. YOu can look at the last few rows using the function **tail()**.   
+```{r}
+# look at first 5 rows of 'data'
+head(data, 5)
+
+# look at last 7 rows of 'data'
+tail(data, 7)
+```
+
+If we want to know what unique values are present within a particular data column, we can use the function **unique()**. This will return one example of each value that is present in the column reagrdless of how many times it appears.
+```{r}
+# check which cruises are present in 'data'
+unique(data$cruise)
+```
+
+Perhaps we we are less concerned with getting all of the values and more interested in figuring out the range in values. We can check this using the **range()** function.
+```{r}
+# check the range in cruises in 'data'
+range(data$cruise)
+```
+This is also very helpful when we are looking at other variables.
+```{r}
+# check the range in depths in 'data'
+range(data$Depth)
+
+```
+
+## Indexing  
+```{r include = FALSE}
+BATS.start <- substr(range(data$yyyymmdd)[1], 1, 4)
+BATS.end <- substr(range(data$yyyymmdd)[2], 1, 4)
+```
+
+The BATS dataset represents a long time series, ranging from `r BATS.start` to `r BATS.end`. Sometimes we do not want to deal with data from all of the cruises. To select specific chunks of data, perhaps for a particular cruise, we can index our dataframe.  
+
+When we index, we tell R what information we want to use to select our values. For this first example, let's select only data from cruise 300 and call it 'BATS.300' (note: it is important that you use "==" to specify the value).
+```{r}
+# select data from BATS cruise 300
+x <- data[data$cruise == "300",]
+str(x)
+unique(x$cruise)
+```
+As you can see, we were able to create a new dataframe that contains all of the data assosciated with BATS cruise #300. Now what if we want data from cruises 300 and 302? Since they are two values in the same column, we can use the command '%in%' to tell R to look for the values in a vector that we provide. 
+```{r}
+# select data from BATS cruises 300 and 302
+x <- data[data$cruise %in% c("300", "302"),]
+str(x)
+unique(x$cruise)
+```
+Indexing is not limited to a single variable; we can add in as many criteria as we need. Also, we do not need to specify an exact value; we can use logical operators (>, <, >=, <=, !=, etc). Suppose we only want data from cruises 289, 290, and 300 from depths between 100 and 1000m?
+```{r}
+# select data from cruises 289, 290, and 300 from depths between 100 and 1000m?
+x <- data[data$cruise %in% c("289", "290", "300") & data$Depth >= 100 & data$Depth <= 1000,]
+str(x)
+unique(x$cruise)
+range(x$Depth)
+```
+
+## Creating Lists
+Lists represent another way that we can store dataframes. Basically, a list is a collection of dataframes, each one of which is called a list element. In the case of the BATS dataset, list can help us split the dataset into whatever units we like but not require us to index a save each dataframe separately. This allows each element to be easily accessible for use in functions.  
+
+The easiest way for us to createour list is by using a function called **split()**. With this function, the first argument is the name of our dataframe and the second argument is the name of the column that we want our split to be based on. Let's go ahead and split up 'data' based on cruise and store it as 'cruise.list'.
+```{r}
+# split 'data' based on cruise
+cruise.list <- split(data, data$cruise)
+```
+
+Unlike dataframes, we can't just open a list. If you look in our R Studio environment, you see that our new list is stored under 'Values' and contains 310 elements. Each of those elements represents one of our cruises. If we want to look at the data for a particular cruise, we need to specify it. 
+```{r}
+# store data for cruise 300 from 'cruise.list'
+cruise.300 <- cruise.list[["300"]] # note the double brackets...muy importante
+str(cruise.300)
+```
+The use of the "[[]]" is important in returning single list elements. If you repeated the command using only "[]", you do not get a dataframe returned. Instead, it just returns a list containing a single element. 
+```{r}
+x <- cruise.list["300"] # notice the single brackets here
+str(x)
+```
+Lists are incredibly helpful in R for running multiple elements through a function. Suppose we wanted to calculate the maximum temperature for each cruise. We don;t really want to index each specific cruise and calculate the maximum temp. Instead, we can pass our cruise list through the function **max()** and it will be applied individually to each list element. In order to do this with use one of the **apply** family of functions, **lapply()**. Using this function, we enter in the list as the first argument and the function as the second argument. The result will be returned as a list.    
+```{r}
+# calculate maximum temperature for each cruise and store as max.temp.list
+# Note: the argument "na.rm" is useful for removing potential NA values from the calculation. Use it anytime there is or may be an NA in your vector of interest.
+max.temp.list <- lapply(cruise.list, function(x){max(x$Temp, na.rm=T)}) 
+
+#look at max temperature for cruise 300
+max.temp.list[["300"]]
+
+# calculate max temperature for cruise 300 using an index
+max(data[data$cruise=="300","Temp"], na.rm=T)
+```
+
+Now, lists are not perfect for everything. One problem they have is that they only work properly if every element can be successfully passed through the function. Not to burst your bubble, but that is not always the case. 
+
+## For Loops
+For loops are a fun alternative to lists for passing separate chunks of data through a function.

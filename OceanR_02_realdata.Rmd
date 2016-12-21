@@ -134,4 +134,17 @@ data$bottle <- substr(data$Id, 9,10)
 str(data)
 ```
 
+We can also modify values in a column using arithmetic. The BATS dataset records longitude in degrees West, which is not necessarily what we might use in downstream applications that require longitude in degree East. Let's create a new column titles 'lonE'.  
+```{r}
+# create column in 'data' for 'lonE'
+data$lonE <- 360 - data$lonW  # convert lonW to lonE
+str(data)
+```
+Now, let's go ahead and save our current dataframe so we can use it later in its current form. Let's call it 'OceanR_BATS_data.csv'.
+```{r}
+# save 'data' as a .csv file
+write.csv(data, file= "OceanR_BATS_data.csv", row.names=F)
+```
+
+
 **Awesome! Now we can start exploring our data!**

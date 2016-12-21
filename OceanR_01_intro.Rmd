@@ -11,10 +11,14 @@ We will be using real oceanographic datasets to learn various skills, such as ma
 Before we start with that, let's take a few minutes to start with the basics for people that have never used R before. First off, let's introduce you to entering data into R.    
 
 ## Comments 
-You will soon notice how some of the code that we have looked at has '#' in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven't used the script in a long time. It is in your best interests to make this a habit...you will appreciate it later!
+You will soon notice how some of the code that we have looked at has '#' in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven't used the script in a long time. It is in your best interests to make this a habit...you will appreciate it later!  
+
+## Functions
+While working with R, you will need to use a variety of functions to accomplish your work. A function is a set of code that does something. On this website, I will put function names in **bold** text so that they are more obvious. These are functions that come pre-loaded in R. You will eventually learn how to add more functions using different packages and even start writing your own. Functions generally appear as the name of the function followed by parentheses (e.g., **mean()**). Inside the function you will enter arguments, which are the values required for the functions to, well..... function. If you ever have a question about how a function works you can ask R by typing "??" followed by the name of the function in the console (don't forget the parentheses!).  
 
 ## Values and Vectors
-You can store values, be they numbers or letters, and assign names to them.   
+You can store values, be they numbers or letters, and assign names to them. You do this by using an "<-". Please do not use an "=" to store values. While it works sometimes, it can be a comflict at other times and is considered to be poor form (don't be *that* person).  
+
 As an example, let's create a series of names.  
 We will do this using the function **c()**, which combines values into a vector and save it as "x".  
 These data are in the class 'character'.  

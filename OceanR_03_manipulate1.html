@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Manipulating Data Part 1</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">HOME</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="OceanR_01_intro.html">Intro to R</a>
+</li>
+<li>
+  <a href="OceanR_02_realdata.html">Working with real data</a>
+</li>
+<li>
+  <a href="OceanR_03_manipulate1.html">Manipulating Data (1)</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Manipulating Data Part 1</h1>
+
+</div>
+
+
+<p>Now that you have prepared your dataframe, it is time to learn how to begin manipulating it.</p>
+<p>Before we get started, let’s open up the dataframe that we saved at the end of the last module.</p>
+<pre class="r"><code># open data file
+data &lt;- read.table(&quot;OceanR_BATS_data.csv&quot;, header=TRUE, sep=&quot;,&quot;)</code></pre>
+<div id="looking-att-our-data" class="section level2">
+<h2>Looking att our data</h2>
+<p>We already have used the <strong>str()</strong> function to look at our dataframe’s structure (formating). Let’s go over a few helpful functions that will tell us more about what values are within our dataset.</p>
+<p>You can open up your entire dataframe in R Studio by clicking on the file in the Environment window. This will open it up in the source window (top left in R studio). You can also type in the name of your dataframe in the console, but be aware that R will print the <em>ENTIRE</em> dataframe so that may really suck for you if it is really long (try it if you don’t believe me).</p>
+<p>Another more efficient way is to just look at a selection of the first few rows by using the function <strong>head()</strong>. You can control the number of rows by putting a number in the second argument. YOu can look at the last few rows using the function <strong>tail()</strong>.</p>
+<pre class="r"><code># look at first 5 rows of &#39;data&#39;
+head(data, 5)</code></pre>
+<pre><code>##           Id yyyymmdd     decy time   latN   lonW  Depth  Temp CTD_S
+## 1 1000100112 19881020 1988.803 2230 31.783 64.116 2000.5 3.817    NA
+## 2 1000100111 19881020 1988.803 2230 31.783 64.116 2200.3 3.577    NA
+## 3 1000100110 19881020 1988.803 2230 31.783 64.116 2398.9 3.317    NA
+## 4 1000100109 19881020 1988.803 2230 31.783 64.116 2600.0 3.127    NA
+## 5 1000100108 19881020 1988.803 2230 31.783 64.116 2801.7 2.927    NA
+##     Sal1 Sig_th  O2_1 OxFix Anom1 CO2 Alk NO3 NO2 PO4 Si POC PON TOC TN
+## 1 34.993 27.817 255.5    NA -53.2  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 2 34.982 27.833 256.8    NA -53.7  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 3     NA     NA    NA    NA    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 4 34.957 27.859 259.4    NA -54.7  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 5 34.944 27.868 261.0    NA -54.6  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+##   Bac POP TDP SRP BSi LSi Pro Syn Piceu Naneu cruise.type cruise cast
+## 1  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1      1    1
+## 2  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1      1    1
+## 3  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1      1    1
+## 4  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1      1    1
+## 5  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1      1    1
+##   bottle    lonE
+## 1     12 295.884
+## 2     11 295.884
+## 3     10 295.884
+## 4      9 295.884
+## 5      8 295.884</code></pre>
+<pre class="r"><code># look at last 7 rows of &#39;data&#39;
+tail(data, 7)</code></pre>
+<pre><code>##               Id yyyymmdd     decy time   latN   lonW Depth   Temp  CTD_S
+## 46415 1031001618 20141213 2014.949 1022 32.157 64.015   2.4 23.275 36.619
+## 46416 1031001619 20141213 2014.949 1022 32.157 64.015   2.8 23.277 36.618
+## 46417 1031001620 20141213 2014.949 1022 32.157 64.015   2.5 23.277 36.618
+## 46418 1031001621 20141213 2014.949 1022 32.157 64.015   2.0 23.275 36.618
+## 46419 1031001622 20141213 2014.949 1022 32.157 64.015   2.5 23.276 36.618
+## 46420 1031001623 20141213 2014.949 1022 32.157 64.015   2.3 23.274 36.619
+## 46421 1031001624 20141213 2014.949 1022 32.157 64.015   2.5 23.276 36.618
+##       Sal1 Sig_th O2_1 OxFix Anom1 CO2 Alk NO3 NO2 PO4 Si POC PON TOC TN
+## 46415   NA 25.085   NA  22.2    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 46416   NA 25.084   NA  22.2    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 46417   NA 25.083   NA  22.2    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 46418   NA 25.084   NA  22.2    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 46419   NA 25.084   NA  22.2    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 46420   NA 25.085   NA  22.2    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+## 46421   NA 25.084   NA  22.2    NA  NA  NA  NA  NA  NA NA  NA  NA  NA NA
+##       Bac POP TDP SRP BSi LSi Pro Syn Piceu Naneu cruise.type cruise cast
+## 46415  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1    310   16
+## 46416  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1    310   16
+## 46417  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1    310   16
+## 46418  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1    310   16
+## 46419  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1    310   16
+## 46420  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1    310   16
+## 46421  NA  NA  NA  NA  NA  NA  NA  NA    NA    NA           1    310   16
+##       bottle    lonE
+## 46415     18 295.985
+## 46416     19 295.985
+## 46417     20 295.985
+## 46418     21 295.985
+## 46419     22 295.985
+## 46420     23 295.985
+## 46421     24 295.985</code></pre>
+<p>If we want to know what unique values are present within a particular data column, we can use the function <strong>unique()</strong>. This will return one example of each value that is present in the column reagrdless of how many times it appears.</p>
+<pre class="r"><code># check which cruises are present in &#39;data&#39;
+unique(data$cruise)</code></pre>
+<pre><code>##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17
+##  [18]  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34
+##  [35]  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51
+##  [52]  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68
+##  [69]  69  70  71  72  73  74  75  76  77  78  79  80  81  82  83  84  85
+##  [86]  86  87  88  89  90  91  92  93  94  95  96  97  98  99 100 101 102
+## [103] 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119
+## [120] 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136
+## [137] 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153
+## [154] 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170
+## [171] 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187
+## [188] 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204
+## [205] 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221
+## [222] 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238
+## [239] 239 240 241 242 243 244 245 246 247 248 249 250 251 252 253 254 255
+## [256] 256 257 258 259 260 261 262 263 264 265 266 267 268 269 270 271 272
+## [273] 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 289
+## [290] 290 291 292 293 294 295 296 297 298 299 300 301 302 303 304 305 306
+## [307] 307 308 309 310</code></pre>
+<p>Perhaps we we are less concerned with getting all of the values and more interested in figuring out the range in values. We can check this using the <strong>range()</strong> function.</p>
+<pre class="r"><code># check the range in cruises in &#39;data&#39;
+range(data$cruise)</code></pre>
+<pre><code>## [1]   1 310</code></pre>
+<p>This is also very helpful when we are looking at other variables.</p>
+<pre class="r"><code># check the range in depths in &#39;data&#39;
+range(data$Depth)</code></pre>
+<pre><code>## [1]    0.3 8587.0</code></pre>
+</div>
+<div id="indexing" class="section level2">
+<h2>Indexing</h2>
+<p>The BATS dataset represents a long time series, ranging from 1988 to 2014. Sometimes we do not want to deal with data from all of the cruises. To select specific chunks of data, perhaps for a particular cruise, we can index our dataframe.</p>
+<p>When we index, we tell R what information we want to use to select our values. For this first example, let’s select only data from cruise 300 and call it ‘BATS.300’ (note: it is important that you use “==” to specify the value).</p>
+<pre class="r"><code># select data from BATS cruise 300
+x &lt;- data[data$cruise == &quot;300&quot;,]
+str(x)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    145 obs. of  39 variables:
+##  $ Id         : num  1.03e+09 1.03e+09 1.03e+09 1.03e+09 1.03e+09 ...
+##  $ yyyymmdd   : int  20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 ...
+##  $ decy       : num  2014 2014 2014 2014 2014 ...
+##  $ time       : int  1809 1809 1809 1809 1809 1809 1809 1809 1809 1809 ...
+##  $ latN       : num  31.7 31.7 31.7 31.7 31.7 ...
+##  $ lonW       : num  64.2 64.2 64.2 64.2 64.2 ...
+##  $ Depth      : num  599 699 799 898 1001 ...
+##  $ Temp       : num  13.24 11.14 8.88 7.37 6.32 ...
+##  $ CTD_S      : num  35.7 35.4 35.2 35.1 35.1 ...
+##  $ Sal1       : num  35.7 35.4 35.2 35.1 35.1 ...
+##  $ Sig_th     : num  26.9 27.1 27.3 27.5 27.6 ...
+##  $ O2_1       : num  165 146 152 176 202 ...
+##  $ OxFix      : num  15 12.9 12.2 10.7 9.7 9.3 9 9.4 8.6 8.4 ...
+##  $ Anom1      : num  -90.6 -121.9 -128.8 -115 -96.4 ...
+##  $ CO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3        : num  14.9 23.1 22.2 20.7 19.4 ...
+##  $ NO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4        : num  1.01 1.63 1.61 1.52 1.46 1.46 1.4 1.34 1.33 1.29 ...
+##  $ Si         : num  5.76 12.61 13.13 12.63 12.09 ...
+##  $ POC        : num  4 3.24 2.41 NA 2.05 NA NA NA NA NA ...
+##  $ PON        : num  1.08 0.79 0.92 0.62 0.79 NA NA NA NA NA ...
+##  $ TOC        : num  46.6 45.1 44.2 43.2 43.5 NA NA NA 43.4 NA ...
+##  $ TN         : num  13.5 17.4 23.3 25.5 23.9 NA NA NA 20.2 NA ...
+##  $ Bac        : num  NA NA 1.1 NA NA NA NA 1.2 NA NA ...
+##  $ POP        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cruise     : int  300 300 300 300 300 300 300 300 300 300 ...
+##  $ cast       : int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ bottle     : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ lonE       : num  296 296 296 296 296 ...</code></pre>
+<pre class="r"><code>unique(x$cruise)</code></pre>
+<pre><code>## [1] 300</code></pre>
+<p>As you can see, we were able to create a new dataframe that contains all of the data assosciated with BATS cruise #300. Now what if we want data from cruises 300 and 302? Since they are two values in the same column, we can use the command ‘%in%’ to tell R to look for the values in a vector that we provide.</p>
+<pre class="r"><code># select data from BATS cruises 300 and 302
+x &lt;- data[data$cruise %in% c(&quot;300&quot;, &quot;302&quot;),]
+str(x)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    373 obs. of  39 variables:
+##  $ Id         : num  1.03e+09 1.03e+09 1.03e+09 1.03e+09 1.03e+09 ...
+##  $ yyyymmdd   : int  20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 ...
+##  $ decy       : num  2014 2014 2014 2014 2014 ...
+##  $ time       : int  1809 1809 1809 1809 1809 1809 1809 1809 1809 1809 ...
+##  $ latN       : num  31.7 31.7 31.7 31.7 31.7 ...
+##  $ lonW       : num  64.2 64.2 64.2 64.2 64.2 ...
+##  $ Depth      : num  599 699 799 898 1001 ...
+##  $ Temp       : num  13.24 11.14 8.88 7.37 6.32 ...
+##  $ CTD_S      : num  35.7 35.4 35.2 35.1 35.1 ...
+##  $ Sal1       : num  35.7 35.4 35.2 35.1 35.1 ...
+##  $ Sig_th     : num  26.9 27.1 27.3 27.5 27.6 ...
+##  $ O2_1       : num  165 146 152 176 202 ...
+##  $ OxFix      : num  15 12.9 12.2 10.7 9.7 9.3 9 9.4 8.6 8.4 ...
+##  $ Anom1      : num  -90.6 -121.9 -128.8 -115 -96.4 ...
+##  $ CO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3        : num  14.9 23.1 22.2 20.7 19.4 ...
+##  $ NO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4        : num  1.01 1.63 1.61 1.52 1.46 1.46 1.4 1.34 1.33 1.29 ...
+##  $ Si         : num  5.76 12.61 13.13 12.63 12.09 ...
+##  $ POC        : num  4 3.24 2.41 NA 2.05 NA NA NA NA NA ...
+##  $ PON        : num  1.08 0.79 0.92 0.62 0.79 NA NA NA NA NA ...
+##  $ TOC        : num  46.6 45.1 44.2 43.2 43.5 NA NA NA 43.4 NA ...
+##  $ TN         : num  13.5 17.4 23.3 25.5 23.9 NA NA NA 20.2 NA ...
+##  $ Bac        : num  NA NA 1.1 NA NA NA NA 1.2 NA NA ...
+##  $ POP        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cruise     : int  300 300 300 300 300 300 300 300 300 300 ...
+##  $ cast       : int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ bottle     : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ lonE       : num  296 296 296 296 296 ...</code></pre>
+<pre class="r"><code>unique(x$cruise)</code></pre>
+<pre><code>## [1] 300 302</code></pre>
+<p>Indexing is not limited to a single variable; we can add in as many criteria as we need. Also, we do not need to specify an exact value; we can use logical operators (&gt;, &lt;, &gt;=, &lt;=, !=, etc). Suppose we only want data from cruises 289, 290, and 300 from depths between 100 and 1000m?</p>
+<pre class="r"><code># select data from cruises 289, 290, and 300 from depths between 100 and 1000m?
+x &lt;- data[data$cruise %in% c(&quot;289&quot;, &quot;290&quot;, &quot;300&quot;) &amp; data$Depth &gt;= 100 &amp; data$Depth &lt;= 1000,]
+str(x)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    183 obs. of  39 variables:
+##  $ Id         : num  1.03e+09 1.03e+09 1.03e+09 1.03e+09 1.03e+09 ...
+##  $ yyyymmdd   : int  20130122 20130122 20130122 20130122 20130122 20130122 20130122 20130122 20130122 20130122 ...
+##  $ decy       : num  2013 2013 2013 2013 2013 ...
+##  $ time       : int  1312 1312 1312 1312 1312 1312 1820 1820 1820 1820 ...
+##  $ latN       : num  31.7 31.7 31.7 31.7 31.7 ...
+##  $ lonW       : num  64.2 64.2 64.2 64.2 64.2 ...
+##  $ Depth      : num  100 100 118 119 160 ...
+##  $ Temp       : num  20.5 20.5 20.5 20.5 19.4 ...
+##  $ CTD_S      : num  36.5 36.5 36.5 36.5 36.6 ...
+##  $ Sal1       : num  NA NA NA NA NA ...
+##  $ Sig_th     : num  25.8 25.8 25.8 25.8 26.1 ...
+##  $ O2_1       : num  NA NA NA NA NA ...
+##  $ OxFix      : num  19 19 19 19 18 18 15.3 13.4 11.8 9.7 ...
+##  $ Anom1      : num  NA NA NA NA NA ...
+##  $ CO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3        : num  NA NA NA NA NA ...
+##  $ NO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4        : num  NA NA NA NA NA NA 0.7 1.05 1.42 1.44 ...
+##  $ Si         : num  NA NA NA NA NA ...
+##  $ POC        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PON        : num  NA NA NA NA NA NA 0.5 0.62 0.36 0.32 ...
+##  $ TOC        : num  NA NA NA NA NA NA 47.6 46.7 45.4 43.9 ...
+##  $ TN         : num  NA NA NA NA NA NA 14.7 20.3 22.8 24.7 ...
+##  $ Bac        : num  NA NA NA NA NA NA NA NA 0.7 NA ...
+##  $ POP        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cruise     : int  289 289 289 289 289 289 289 289 289 289 ...
+##  $ cast       : int  2 2 2 2 2 2 3 3 3 3 ...
+##  $ bottle     : int  11 12 13 14 15 16 1 2 3 4 ...
+##  $ lonE       : num  296 296 296 296 296 ...</code></pre>
+<pre class="r"><code>unique(x$cruise)</code></pre>
+<pre><code>## [1] 289 290 300</code></pre>
+<pre class="r"><code>range(x$Depth)</code></pre>
+<pre><code>## [1] 100.1 999.0</code></pre>
+</div>
+<div id="creating-lists" class="section level2">
+<h2>Creating Lists</h2>
+<p>Lists represent another way that we can store dataframes. Basically, a list is a collection of dataframes, each one of which is called a list element. In the case of the BATS dataset, list can help us split the dataset into whatever units we like but not require us to index a save each dataframe separately. This allows each element to be easily accessible for use in functions.</p>
+<p>The easiest way for us to createour list is by using a function called <strong>split()</strong>. With this function, the first argument is the name of our dataframe and the second argument is the name of the column that we want our split to be based on. Let’s go ahead and split up ‘data’ based on cruise and store it as ‘cruise.list’.</p>
+<pre class="r"><code># split &#39;data&#39; based on cruise
+cruise.list &lt;- split(data, data$cruise)</code></pre>
+<p>Unlike dataframes, we can’t just open a list. If you look in our R Studio environment, you see that our new list is stored under ‘Values’ and contains 310 elements. Each of those elements represents one of our cruises. If we want to look at the data for a particular cruise, we need to specify it.</p>
+<pre class="r"><code># store data for cruise 300 from &#39;cruise.list&#39;
+cruise.300 &lt;- cruise.list[[&quot;300&quot;]] # note the double brackets...muy importante
+str(cruise.300)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    145 obs. of  39 variables:
+##  $ Id         : num  1.03e+09 1.03e+09 1.03e+09 1.03e+09 1.03e+09 ...
+##  $ yyyymmdd   : int  20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 ...
+##  $ decy       : num  2014 2014 2014 2014 2014 ...
+##  $ time       : int  1809 1809 1809 1809 1809 1809 1809 1809 1809 1809 ...
+##  $ latN       : num  31.7 31.7 31.7 31.7 31.7 ...
+##  $ lonW       : num  64.2 64.2 64.2 64.2 64.2 ...
+##  $ Depth      : num  599 699 799 898 1001 ...
+##  $ Temp       : num  13.24 11.14 8.88 7.37 6.32 ...
+##  $ CTD_S      : num  35.7 35.4 35.2 35.1 35.1 ...
+##  $ Sal1       : num  35.7 35.4 35.2 35.1 35.1 ...
+##  $ Sig_th     : num  26.9 27.1 27.3 27.5 27.6 ...
+##  $ O2_1       : num  165 146 152 176 202 ...
+##  $ OxFix      : num  15 12.9 12.2 10.7 9.7 9.3 9 9.4 8.6 8.4 ...
+##  $ Anom1      : num  -90.6 -121.9 -128.8 -115 -96.4 ...
+##  $ CO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3        : num  14.9 23.1 22.2 20.7 19.4 ...
+##  $ NO2        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4        : num  1.01 1.63 1.61 1.52 1.46 1.46 1.4 1.34 1.33 1.29 ...
+##  $ Si         : num  5.76 12.61 13.13 12.63 12.09 ...
+##  $ POC        : num  4 3.24 2.41 NA 2.05 NA NA NA NA NA ...
+##  $ PON        : num  1.08 0.79 0.92 0.62 0.79 NA NA NA NA NA ...
+##  $ TOC        : num  46.6 45.1 44.2 43.2 43.5 NA NA NA 43.4 NA ...
+##  $ TN         : num  13.5 17.4 23.3 25.5 23.9 NA NA NA 20.2 NA ...
+##  $ Bac        : num  NA NA 1.1 NA NA NA NA 1.2 NA NA ...
+##  $ POP        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cruise     : int  300 300 300 300 300 300 300 300 300 300 ...
+##  $ cast       : int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ bottle     : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ lonE       : num  296 296 296 296 296 ...</code></pre>
+<p>The use of the “[[]]” is important in returning single list elements. If you repeated the command using only “[]”, you do not get a dataframe returned. Instead, it just returns a list containing a single element.</p>
+<pre class="r"><code>x &lt;- cruise.list[&quot;300&quot;] # notice the single brackets here
+str(x)</code></pre>
+<pre><code>## List of 1
+##  $ 300:&#39;data.frame&#39;: 145 obs. of  39 variables:
+##   ..$ Id         : num [1:145] 1.03e+09 1.03e+09 1.03e+09 1.03e+09 1.03e+09 ...
+##   ..$ yyyymmdd   : int [1:145] 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 20131209 ...
+##   ..$ decy       : num [1:145] 2014 2014 2014 2014 2014 ...
+##   ..$ time       : int [1:145] 1809 1809 1809 1809 1809 1809 1809 1809 1809 1809 ...
+##   ..$ latN       : num [1:145] 31.7 31.7 31.7 31.7 31.7 ...
+##   ..$ lonW       : num [1:145] 64.2 64.2 64.2 64.2 64.2 ...
+##   ..$ Depth      : num [1:145] 599 699 799 898 1001 ...
+##   ..$ Temp       : num [1:145] 13.24 11.14 8.88 7.37 6.32 ...
+##   ..$ CTD_S      : num [1:145] 35.7 35.4 35.2 35.1 35.1 ...
+##   ..$ Sal1       : num [1:145] 35.7 35.4 35.2 35.1 35.1 ...
+##   ..$ Sig_th     : num [1:145] 26.9 27.1 27.3 27.5 27.6 ...
+##   ..$ O2_1       : num [1:145] 165 146 152 176 202 ...
+##   ..$ OxFix      : num [1:145] 15 12.9 12.2 10.7 9.7 9.3 9 9.4 8.6 8.4 ...
+##   ..$ Anom1      : num [1:145] -90.6 -121.9 -128.8 -115 -96.4 ...
+##   ..$ CO2        : num [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ Alk        : num [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ NO3        : num [1:145] 14.9 23.1 22.2 20.7 19.4 ...
+##   ..$ NO2        : num [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ PO4        : num [1:145] 1.01 1.63 1.61 1.52 1.46 1.46 1.4 1.34 1.33 1.29 ...
+##   ..$ Si         : num [1:145] 5.76 12.61 13.13 12.63 12.09 ...
+##   ..$ POC        : num [1:145] 4 3.24 2.41 NA 2.05 NA NA NA NA NA ...
+##   ..$ PON        : num [1:145] 1.08 0.79 0.92 0.62 0.79 NA NA NA NA NA ...
+##   ..$ TOC        : num [1:145] 46.6 45.1 44.2 43.2 43.5 NA NA NA 43.4 NA ...
+##   ..$ TN         : num [1:145] 13.5 17.4 23.3 25.5 23.9 NA NA NA 20.2 NA ...
+##   ..$ Bac        : num [1:145] NA NA 1.1 NA NA NA NA 1.2 NA NA ...
+##   ..$ POP        : num [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ TDP        : int [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ SRP        : int [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ BSi        : num [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ LSi        : num [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ Pro        : int [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ Syn        : int [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ Piceu      : int [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ Naneu      : int [1:145] NA NA NA NA NA NA NA NA NA NA ...
+##   ..$ cruise.type: int [1:145] 1 1 1 1 1 1 1 1 1 1 ...
+##   ..$ cruise     : int [1:145] 300 300 300 300 300 300 300 300 300 300 ...
+##   ..$ cast       : int [1:145] 2 2 2 2 2 2 2 2 2 2 ...
+##   ..$ bottle     : int [1:145] 1 2 3 4 5 6 7 8 9 10 ...
+##   ..$ lonE       : num [1:145] 296 296 296 296 296 ...</code></pre>
+<p>Lists are incredibly helpful in R for running multiple elements through a function. Suppose we wanted to calculate the maximum temperature for each cruise. We don;t really want to index each specific cruise and calculate the maximum temp. Instead, we can pass our cruise list through the function <strong>max()</strong> and it will be applied individually to each list element. In order to do this with use one of the <strong>apply</strong> family of functions, <strong>lapply()</strong>. Using this function, we enter in the list as the first argument and the function as the second argument. The result will be returned as a list.</p>
+<pre class="r"><code># calculate maximum temperature for each cruise and store as max.temp.list
+# Note: the argument &quot;na.rm&quot; is useful for removing potential NA values from the calculation. Use it anytime there is or may be an NA in your vector of interest.
+max.temp.list &lt;- lapply(cruise.list, function(x){max(x$Temp, na.rm=T)}) 
+
+#look at max temperature for cruise 300
+max.temp.list[[&quot;300&quot;]]</code></pre>
+<pre><code>## [1] 22.871</code></pre>
+<pre class="r"><code># calculate max temperature for cruise 300 using an index
+max(data[data$cruise==&quot;300&quot;,&quot;Temp&quot;], na.rm=T)</code></pre>
+<pre><code>## [1] 22.871</code></pre>
+<p>Now, lists are not perfect for everything. One problem they have is that they only work properly if every element can be successfully passed through the function. Not to burst your bubble, but that is not always the case.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

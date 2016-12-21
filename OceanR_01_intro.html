@@ -279,6 +279,9 @@ div.tocify {
 <li>
   <a href="OceanR_02_realdata.html">Working with real data</a>
 </li>
+<li>
+  <a href="OceanR_03_manipulate1.html">Manipulating Data (1)</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -302,10 +305,14 @@ div.tocify {
 <h2>Comments</h2>
 <p>You will soon notice how some of the code that we have looked at has ‘#’ in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven’t used the script in a long time. It is in your best interests to make this a habit…you will appreciate it later!</p>
 </div>
+<div id="functions" class="section level2">
+<h2>Functions</h2>
+<p>While working with R, you will need to use a variety of functions to accomplish your work. A function is a set of code that does something. On this website, I will put function names in <strong>bold</strong> text so that they are more obvious. These are functions that come pre-loaded in R. You will eventually learn how to add more functions using different packages and even start writing your own. Functions generally appear as the name of the function followed by parentheses (e.g., <strong>mean()</strong>). Inside the function you will enter arguments, which are the values required for the functions to, well….. function. If you ever have a question about how a function works you can ask R by typing “??” followed by the name of the function in the console (don’t forget the parentheses!).</p>
+</div>
 <div id="values-and-vectors" class="section level2">
 <h2>Values and Vectors</h2>
-<p>You can store values, be they numbers or letters, and assign names to them.<br />
-As an example, let’s create a series of names.<br />
+<p>You can store values, be they numbers or letters, and assign names to them. You do this by using an “&lt;-”. Please do not use an “=” to store values. While it works sometimes, it can be a comflict at other times and is considered to be poor form (don’t be <em>that</em> person).</p>
+<p>As an example, let’s create a series of names.<br />
 We will do this using the function <strong>c()</strong>, which combines values into a vector and save it as “x”.<br />
 These data are in the class ‘character’.<br />
 Anything inside quotation marks “” is a string.</p>
@@ -384,8 +391,8 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  3.04 9.78 9.29 7.67 4.64 ...
-##  $ paramB: int  76 7 65 4 26 19 33 49 8 5 ...</code></pre>
+##  $ paramA: num  5.67 9.776 0.572 6.507 0.197 ...
+##  $ paramB: int  55 66 7 61 91 78 28 41 92 64 ...</code></pre>
 </div>
 <div id="saving-a-dataframe" class="section level2">
 <h2>Saving a dataframe</h2>
