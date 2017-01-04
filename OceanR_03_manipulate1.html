@@ -652,7 +652,26 @@ max(data[data$cruise==&quot;300&quot;,&quot;Temp&quot;], na.rm=T)</code></pre>
 </div>
 <div id="for-loops" class="section level2">
 <h2>For Loops</h2>
-<p>For loops are a fun alternative to lists for passing separate chunks of data through a function.</p>
+<p>For loops are a fun alternative to lists for passing separate chunks of data through a function. For loops are used to iterate over a vector (run the same thing multiple times)</p>
+<pre class="r"><code>for (val in sequence)
+{
+    statement
+}</code></pre>
+<p>The ‘val’ represents a value within the vector ‘sequence’. Each ‘val’ gets passed through the ‘statement’, which is what we want R to do for us.</p>
+<p>Now let’s use a For loop to calculate the maximum temp for each cruise. We need to do a couple things before we let R calculate the max temps. First, we need to specify what our vector, which will be cruise number. Second, we need to create a place for the For loop to put our resulting data. If we don’t do that, if will just show the last value that it calculated.</p>
+<pre class="r"><code># create vector of cruise numbers that we want to look at
+cruises &lt;- c(seq(1:max(data$cruise)))
+# create vector to put the resulting data
+result &lt;- rep(NA,length(cruises))
+
+for(i in cruises){
+  result[i] &lt;- max(data[data$cruise==i,&quot;Temp&quot;], na.rm=T)
+}
+head(result)</code></pre>
+<pre><code>## [1]  3.817 24.111 21.805 20.892 20.007 21.035</code></pre>
+<pre class="r"><code>result[300]</code></pre>
+<pre><code>## [1] 22.871</code></pre>
+<p>Different goals may call for different approaches in terms of using an lapply function with lists or passing data through For loops.</p>
 </div>
 
 

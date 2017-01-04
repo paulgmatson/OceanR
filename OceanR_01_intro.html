@@ -391,8 +391,8 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  8.21 7.284 7.858 3.836 0.339 ...
-##  $ paramB: int  93 57 53 9 73 23 72 39 28 95 ...</code></pre>
+##  $ paramA: num  6.18 8.36 1.48 6.33 9.12 ...
+##  $ paramB: int  50 29 31 70 51 65 59 48 10 86 ...</code></pre>
 </div>
 <div id="saving-a-dataframe" class="section level2">
 <h2>Saving a dataframe</h2>
@@ -401,7 +401,7 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 First, we need to figure out where it is going to be saved. The best way to do this is to check our working directory using the function <strong>getwd()</strong></p>
 <pre class="r"><code># get the working directory
 getwd()</code></pre>
-<pre><code>## [1] &quot;/Users/pmatson/Dropbox/OceanR&quot;</code></pre>
+<pre><code>## [1] &quot;/Users/paulmatson/Dropbox/OceanR&quot;</code></pre>
 <p>If we want it to go somewhere else, we can either change the working directory using the function <strong>setwd()</strong><br />
 <br><br />
 Then we use the function <strong>write.csv()</strong> to create the file that will be saved in that directory</p>
