@@ -357,15 +357,9 @@ div.tocify {
 <p>Or, we can click the ‘packages’ tab in RStudio (in the lower right panel), which lists all of the installed packages.</p>
 <p>However, sometimes we want to do something that is not included in R. One of the wonderful things about R is that it is an open-source program that is supported many many intelligent and <strong><em>helpful</em></strong> people (yes, I am taking a swipe at Matlab’s message boards). One aspect of this support is in the form of packages, which are units of R code containing functions and the asscoiated documentation decscribing how to use them along with sample data. We can download and install new packages using the RStudio GUI. Click on ‘Tools’ on the Menu Bar and select ‘Install Packages’. From here, you will then type in the package that you want to download and RStudio will do the rest.</p>
 <p><strong><em>Note</em></strong>: Be sure to check ‘Install Dependencies’ for the package. This way you get any additional packages that are required for it to function correctly.</p>
-<p>Let’s go ahead and download the package ‘data.table’.</p>
-<p>After installing ‘gdata’ in our library, we need to tell R to make it available for use.</p>
-<pre class="r"><code>library(data.table)</code></pre>
-<p>Now we can learn about the package by using the help command, which will bring up the help page in the lower right panel of RStudio</p>
-<pre class="r"><code># get the help page for a package
-??data.table</code></pre>
-<p>If we need help using a particular function, we use a similar command, except with a single ‘?’. Again, the help page will show up in the lower right panel of RStudio. Remember, this will only work if the package containing the function is loaded (unless it is a ‘base’ package)</p>
-<pre class="r"><code># get the help page for the &#39;mean&#39; function
-?mean()</code></pre>
+<p>Let’s go ahead and download the package ‘gdata’.</p>
+<p>After ‘gdata’ is installed, you will need to tell R to load the package from your library so that you can use it.</p>
+<pre class="r"><code>library(gdata)</code></pre>
 <p><strong><em>Another Note</em></strong>: An unfortunate side-effect of updating R (on Macs at least) is that your library of packages will be erased. I can give you a script that I wrote to help you save your package library later.</p>
 <p>Let’s take a few minutes to start with the basics for people that have never used R before. First off, let’s introduce you to entering data into R.</p>
 </div>
@@ -459,8 +453,8 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  0.808 3.586 4.384 6.746 4.588 ...
-##  $ paramB: int  74 57 12 97 22 33 88 60 57 23 ...</code></pre>
+##  $ paramA: num  4.833 1.619 4.177 7.312 0.421 ...
+##  $ paramB: int  31 71 2 5 46 48 75 79 38 77 ...</code></pre>
 </div>
 <div id="saving-a-dataframe" class="section level2">
 <h2>Saving a dataframe</h2>

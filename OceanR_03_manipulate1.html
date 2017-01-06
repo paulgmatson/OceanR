@@ -549,7 +549,9 @@ str(x)</code></pre>
 <div id="creating-lists" class="section level2">
 <h2>Creating Lists</h2>
 <p>Lists represent another way that we can store dataframes. Basically, a list is a collection of dataframes, each one of which is called a list element. In the case of the BATS dataset, list can help us split the dataset into whatever units we like but not require us to index a save each dataframe separately. This allows each element to be easily accessible for use in functions.</p>
-<p>The easiest way for us to createour list is by using a function called <strong>split()</strong>. With this function, the first argument is the name of our dataframe and the second argument is the name of the column that we want our split to be based on. Let’s go ahead and split up ‘data’ based on cruise and store it as ‘cruise.list’.</p>
+<p>The easiest way for us to createour list is by using a function called <strong>split()</strong>. With this function, the first argument is the name of our dataframe and the second argument is the name of the column that we want our split to be based on.</p>
+<pre class="r"><code>new.list &lt;- split(dataframe, column to be split)</code></pre>
+<p>Let’s go ahead and split up ‘data’ based on cruise and store it as ‘cruise.list’.</p>
 <pre class="r"><code># split &#39;data&#39; based on cruise
 cruise.list &lt;- split(data, data$cruise)</code></pre>
 <p>Unlike dataframes, we can’t just open a list. If you look in our R Studio environment, you see that our new list is stored under ‘Values’ and contains 310 elements. Each of those elements represents one of our cruises. If we want to look at the data for a particular cruise, we need to specify it.</p>
@@ -656,29 +658,11 @@ max(data[data$cruise==&quot;300&quot;,&quot;Temp&quot;], na.rm=T)</code></pre>
 <pre><code>## [1] 22.871</code></pre>
 <p>Now, lists are not perfect for everything. One problem they have is that they only work properly if every element can be successfully passed through the function. Not to burst your bubble, but that is not always the case.</p>
 </div>
-<div id="for-loops" class="section level2">
-<h2>For Loops</h2>
-<p>For loops are a fun alternative to lists for passing separate chunks of data through a function. For loops are used to iterate over a vector (run the same thing multiple times)</p>
-<pre class="r"><code>for (val in sequence)
-{
-    statement
-}</code></pre>
-<p>The ‘val’ represents a value within the vector ‘sequence’. Each ‘val’ gets passed through the ‘statement’, which is what we want R to do for us.</p>
-<p>Now let’s use a For loop to calculate the maximum temp for each cruise. We need to do a couple things before we let R calculate the max temps. First, we need to specify what our vector, which will be cruise number. Second, we need to create a place for the For loop to put our resulting data. If we don’t do that, if will just show the last value that it calculated.</p>
-<pre class="r"><code># create vector of cruise numbers that we want to look at
-cruises &lt;- c(seq(1:max(data$cruise)))
-# create vector to put the resulting data
-result &lt;- rep(NA,length(cruises))
-
-for(i in cruises){
-  result[i] &lt;- max(data[data$cruise==i,&quot;Temp&quot;], na.rm=T)
-}
-head(result)</code></pre>
-<pre><code>## [1]  3.817 24.111 21.805 20.892 20.007 21.035</code></pre>
-<pre class="r"><code>result[300]</code></pre>
-<pre><code>## [1] 22.871</code></pre>
-<p>Different goals may call for different approaches in terms of using an lapply function with lists or passing data through For loops.</p>
-<p><strong><em>Note</em></strong>: If you pass a list through a function and get an error, nothing will be returned. However, if you get an error while using a For loop, the loop will stop at the place where the error occurred. This can be very helpful when you are debugging your code.</p>
+<div id="save-your-data-as-an-r-datafile" class="section level2">
+<h2>Save your data as an R datafile</h2>
+<p>This is helpful if you want to save your dataframe so that you can quickly continue working in R whichout having to read it in as a .csv or .txt file.</p>
+<pre class="r"><code># Save your dataframe as an R datafile (.Rda)
+save(data, file=&quot;BATSdata.Rda&quot;)</code></pre>
 </div>
 
 
