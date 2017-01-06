@@ -21,7 +21,7 @@ function(x){
 }
 ```
 
-For example, let's make a function that converts celsius into farhenheit.
+For example, let's make a function that converts celsius into farhenheit. After you run the lines containing the function, it will show up in your Environment window under "Functions".
 ```{r}
 c2f <- function(x){
   degF <- (x * (9/5)) +32
