@@ -300,7 +300,55 @@ div.tocify {
 
 
 <p>We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.</p>
-<p>Before we start with that, let’s take a few minutes to start with the basics for people that have never used R before. First off, let’s introduce you to entering data into R.</p>
+<div id="before-we-get-started" class="section level2">
+<h2>Before we get started</h2>
+<p>I strongly suggest that you use RStudio when working with R. This program is free and will help make your life much easier in terms of editting code and visualizing your data. You can download the latest version for either Mac or Windows <a href="https://www.rstudio.com/products/rstudio/download/">here</a>.</p>
+<p>R periodically releases new versions and it is good to keep your software up to date. Whenever you start R or RStudio, the version nmuber and name will be displayed in the console. You can always check the version by entering the following command into the console.</p>
+<pre class="r"><code>R.Version()</code></pre>
+<pre><code>## $platform
+## [1] &quot;x86_64-apple-darwin13.4.0&quot;
+## 
+## $arch
+## [1] &quot;x86_64&quot;
+## 
+## $os
+## [1] &quot;darwin13.4.0&quot;
+## 
+## $system
+## [1] &quot;x86_64, darwin13.4.0&quot;
+## 
+## $status
+## [1] &quot;&quot;
+## 
+## $major
+## [1] &quot;3&quot;
+## 
+## $minor
+## [1] &quot;3.2&quot;
+## 
+## $year
+## [1] &quot;2016&quot;
+## 
+## $month
+## [1] &quot;10&quot;
+## 
+## $day
+## [1] &quot;31&quot;
+## 
+## $`svn rev`
+## [1] &quot;71607&quot;
+## 
+## $language
+## [1] &quot;R&quot;
+## 
+## $version.string
+## [1] &quot;R version 3.3.2 (2016-10-31)&quot;
+## 
+## $nickname
+## [1] &quot;Sincere Pumpkin Patch&quot;</code></pre>
+<p><strong><em>Note</em></strong>: An unfortunate side-effect of updating R (on Macs at least) is that your library of packages will be erased. I can give you a script that I wrote to help you save your package library later.</p>
+<p>Let’s take a few minutes to start with the basics for people that have never used R before. First off, let’s introduce you to entering data into R.</p>
+</div>
 <div id="comments" class="section level2">
 <h2>Comments</h2>
 <p>You will soon notice how some of the code that we have looked at has ‘#’ in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven’t used the script in a long time. It is in your best interests to make this a habit…you will appreciate it later!</p>
@@ -391,8 +439,8 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  6.18 8.36 1.48 6.33 9.12 ...
-##  $ paramB: int  50 29 31 70 51 65 59 48 10 86 ...</code></pre>
+##  $ paramA: num  6.9 9.57 5.75 4.93 2.49 ...
+##  $ paramB: int  35 87 11 36 53 34 58 97 84 13 ...</code></pre>
 </div>
 <div id="saving-a-dataframe" class="section level2">
 <h2>Saving a dataframe</h2>

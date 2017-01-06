@@ -5,10 +5,21 @@ output:
     toc: true
     toc_float: true
 ---
+We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.  
 
-We will be using real oceanographic datasets to learn various skills, such as manipulating and merging datasets, plotting profiles, making maps, and anything else that might be useful.   
+## Before we get started
+I strongly suggest that you use RStudio when working with R. This program is free and will help make your life much easier in terms of editting code and visualizing your data. You can download the latest version for either Mac or Windows [here](https://www.rstudio.com/products/rstudio/download/).
 
-Before we start with that, let's take a few minutes to start with the basics for people that have never used R before. First off, let's introduce you to entering data into R.    
+R periodically releases new versions and it is good to keep your software up to date. Whenever you start R or RStudio, the version nmuber and name will be displayed in the console. You can always check the version by entering the following command into the console.
+```{r}
+R.Version()
+```
+
+***Note***: An unfortunate side-effect of updating R (on Macs at least) is that your library of packages will be erased. I can give you a script that I wrote to help you save your package library later.
+
+ 
+
+Let's take a few minutes to start with the basics for people that have never used R before. First off, let's introduce you to entering data into R.    
 
 ## Comments 
 You will soon notice how some of the code that we have looked at has '#' in front of it. By starting a line with this symbol, we are telling R to not run this line as part of the code. This allows us to leave notes for ourselves (comments) that can be incredibly helpful in keeping track of what we are doing, especially if we haven't used the script in a long time. It is in your best interests to make this a habit...you will appreciate it later!  

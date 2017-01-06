@@ -282,6 +282,9 @@ div.tocify {
 <li>
   <a href="OceanR_03_manipulate1.html">Manipulating Data: Part 1</a>
 </li>
+<li>
+  <a href="OceanR_04_manipulate2.html">Manipulating Data: Part 2</a>
+</li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         
@@ -637,6 +640,9 @@ str(x)</code></pre>
 ##   ..$ cast       : int [1:145] 2 2 2 2 2 2 2 2 2 2 ...
 ##   ..$ bottle     : int [1:145] 1 2 3 4 5 6 7 8 9 10 ...
 ##   ..$ lonE       : num [1:145] 296 296 296 296 296 ...</code></pre>
+</div>
+<div id="passing-a-list-through-a-function" class="section level2">
+<h2>Passing a list through a function</h2>
 <p>Lists are incredibly helpful in R for running multiple elements through a function. Suppose we wanted to calculate the maximum temperature for each cruise. We don;t really want to index each specific cruise and calculate the maximum temp. Instead, we can pass our cruise list through the function <strong>max()</strong> and it will be applied individually to each list element. In order to do this with use one of the <strong>apply</strong> family of functions, <strong>lapply()</strong>. Using this function, we enter in the list as the first argument and the function as the second argument. The result will be returned as a list.</p>
 <pre class="r"><code># calculate maximum temperature for each cruise and store as max.temp.list
 # Note: the argument &quot;na.rm&quot; is useful for removing potential NA values from the calculation. Use it anytime there is or may be an NA in your vector of interest.
@@ -672,6 +678,7 @@ head(result)</code></pre>
 <pre class="r"><code>result[300]</code></pre>
 <pre><code>## [1] 22.871</code></pre>
 <p>Different goals may call for different approaches in terms of using an lapply function with lists or passing data through For loops.</p>
+<p><strong><em>Note</em></strong>: If you pass a list through a function and get an error, nothing will be returned. However, if you get an error while using a For loop, the loop will stop at the place where the error occurred. This can be very helpful when you are debugging your code.</p>
 </div>
 
 

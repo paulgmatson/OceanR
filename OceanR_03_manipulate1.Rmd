@@ -98,6 +98,8 @@ The use of the "[[]]" is important in returning single list elements. If you rep
 x <- cruise.list["300"] # notice the single brackets here
 str(x)
 ```
+
+## Passing a list through a function
 Lists are incredibly helpful in R for running multiple elements through a function. Suppose we wanted to calculate the maximum temperature for each cruise. We don;t really want to index each specific cruise and calculate the maximum temp. Instead, we can pass our cruise list through the function **max()** and it will be applied individually to each list element. In order to do this with use one of the **apply** family of functions, **lapply()**. Using this function, we enter in the list as the first argument and the function as the second argument. The result will be returned as a list.    
 ```{r}
 # calculate maximum temperature for each cruise and store as max.temp.list
@@ -139,3 +141,13 @@ head(result)
 result[300]
 ```
 Different goals may call for different approaches in terms of using an lapply function with lists or passing data through For loops. 
+
+***Note***: If you pass a list through a function and get an error, nothing will be returned. However, if you get an error while using a For loop, the loop will stop at the place where the error occurred. This can be very helpful when you are debugging your code.
+
+## Save your data as an R datafile
+This is helpful if you want to save your dataframe so that you can quickly continue working in R whichout having to read it in as a .csv or .txt file.
+```{r}
+# Save your dataframe as an R datafile (.Rda)
+save(data, file="BATSdata.Rda")
+```
+
