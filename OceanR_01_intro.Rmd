@@ -27,23 +27,15 @@ However, sometimes we want to do something that is not included in R. One of the
 
 ***Note***: Be sure to check 'Install Dependencies' for the package. This way you get any additional packages that are required for it to function correctly.  
   
-Let's go ahead and download the package 'data.table'.
+Let's go ahead and download the package 'gdata'.  
   
-After installing 'gdata' in our library, we need to tell R to make it available for use. 
-```{r}
-library(data.table)
+After 'gdata' is installed, you will need to tell R to load the package from your library so that you can use it.  
+```{r eval=F}
+library(gdata)
 ```
-Now we can learn about the package by using the help command, which will bring up the help page in the lower right panel of RStudio
-```{r}
-# get the help page for a package
-??data.table
-```
-  
-If we need help using a particular function, we use a similar command, except with a single '?'. Again, the help page will show up in the lower right panel of RStudio. Remember, this will only work if the package containing the function is loaded (unless it is a 'base' package)
-```{r}
-# get the help page for the 'mean' function
-?mean()
-```
+
+
+
 
 ***Another Note***: An unfortunate side-effect of updating R (on Macs at least) is that your library of packages will be erased. I can give you a script that I wrote to help you save your package library later.
 
