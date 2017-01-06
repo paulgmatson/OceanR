@@ -15,9 +15,37 @@ R periodically releases new versions and it is good to keep your software up to 
 R.Version()
 ```
 
-***Note***: An unfortunate side-effect of updating R (on Macs at least) is that your library of packages will be erased. I can give you a script that I wrote to help you save your package library later.
 
- 
+## Packages
+R comes pre-loaded with many basic functions (considered to be 'base') that you can use for performing different tasks. We can view the installed packages using the following command.  
+```{r eval=F}
+installed.packages()
+```
+Or, we can click the 'packages' tab in RStudio (in the lower right panel), which lists all of the installed packages.  
+  
+However, sometimes we want to do something that is not included in R. One of the wonderful things about R is that it is an open-source program that is supported many many intelligent and ***helpful*** people (yes, I am taking a swipe at Matlab's message boards). One aspect of this support is in the form of packages, which are units of R code containing functions and the asscoiated documentation decscribing how to use them along with sample data.  We can download and install new packages using the RStudio GUI. Click on 'Tools' on the Menu Bar and select 'Install Packages'. From here, you will then type in the package that you want to download and RStudio will do the rest.  
+
+***Note***: Be sure to check 'Install Dependencies' for the package. This way you get any additional packages that are required for it to function correctly.  
+  
+Let's go ahead and download the package 'data.table'.
+  
+After installing 'gdata' in our library, we need to tell R to make it available for use. 
+```{r}
+library(data.table)
+```
+Now we can learn about the package by using the help command, which will bring up the help page in the lower right panel of RStudio
+```{r}
+# get the help page for a package
+??data.table
+```
+  
+If we need help using a particular function, we use a similar command, except with a single '?'. Again, the help page will show up in the lower right panel of RStudio. Remember, this will only work if the package containing the function is loaded (unless it is a 'base' package)
+```{r}
+# get the help page for the 'mean' function
+?mean()
+```
+
+***Another Note***: An unfortunate side-effect of updating R (on Macs at least) is that your library of packages will be erased. I can give you a script that I wrote to help you save your package library later.
 
 Let's take a few minutes to start with the basics for people that have never used R before. First off, let's introduce you to entering data into R.    
 
