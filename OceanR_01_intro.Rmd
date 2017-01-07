@@ -139,7 +139,7 @@ We can now check the structure of our dataset by using the **str()** function wh
 str(df) # check structure of dataframe
 ```
 
-## Saving a dataframe
+## Saving a dataframe as a .csv
 Suppose we want to save our dataframe so that we can either send it to a collaborator or open it in another program.  
 
 The easiest way is to save it as a .csv file.  
