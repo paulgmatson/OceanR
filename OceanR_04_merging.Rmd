@@ -9,3 +9,30 @@ output:
 load("BATSdata.Rda")
 ```
 
+Next we will look at how we expand our dataframes. Sometimes this is just by adding new observations of the same parameters (adding rows). Other times we want to add new parameters (adding columns). Finally, sometimes we want to pick and choose information from different sources and combine it into a single dataframe (merging).
+
+## Adding observations to dataframes
+Let's suspend reality for a second and suppose that we have two separate dataframes, one from BATS cruise 200 and one from cruise 310, that we want to combine into a signle dataframe. Both dataframes have the same parameters so the number of columns will remain the same but the number of rows will change.
+```{r}
+cruise.200 <- data[data$cruise == 200,] # create index 
+cruise.310 <- data[data$cruise == 310,] # create index 
+
+# bind the row together, with cruise.200 first and cruise.310 second
+cruise.set <- rbind(cruise.200, cruise.310)
+
+# check the structure of cruise.set
+```
+
+## Merging
+Sometimes we have measurements from new parameters that we want to add to our dataframe. We can use the function ***merge()*** to combine separate dataframes into one. In order for this to work, there has to be at least one common variable between the two dataframes, sort of like a reference key that R can use to figure out what goes where. Let's try it first with a simplified example.
+```{r}
+a <- data.frame(c(1,2,3,4,5), c(1,1,1,1,1))
+colnames(a) <- c("obs", "numeric")
+a
+b <- data.frame(c(1,2,3,4,5), c("a","b","c","d","e"))
+colnames(b) <- c("obs", "letters")
+b
+c <- merge(a,b)
+c
+```
+
