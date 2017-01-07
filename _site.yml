@@ -6,10 +6,10 @@ navbar:
       href: OceanR_01_intro.html
     - text: "Working with real data"
       href: OceanR_02_realdata.html
-    - text: "Manipulating Data: Part 1"
+    - text: "Manipulating Data"
       href: OceanR_03_manipulate1.html
-    - text: "Manipulating Data: Part 2"
-      href: OceanR_04_manipulate2.html
+    - text: "Merging Dataframes"
+      href: OceanR_04_merging.html
 output_dir: "."
 output:
   html_document:

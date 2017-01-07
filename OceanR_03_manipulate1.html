@@ -11,7 +11,7 @@
 
 
 
-<title>Manipulating Data Part 1</title>
+<title>Manipulating Data</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -280,10 +280,10 @@ div.tocify {
   <a href="OceanR_02_realdata.html">Working with real data</a>
 </li>
 <li>
-  <a href="OceanR_03_manipulate1.html">Manipulating Data: Part 1</a>
+  <a href="OceanR_03_manipulate1.html">Manipulating Data</a>
 </li>
 <li>
-  <a href="OceanR_04_manipulate2.html">Manipulating Data: Part 2</a>
+  <a href="OceanR_04_merging.html">Merging Dataframes</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -297,7 +297,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Manipulating Data Part 1</h1>
+<h1 class="title toc-ignore">Manipulating Data</h1>
 
 </div>
 
@@ -663,6 +663,139 @@ max(data[data$cruise==&quot;300&quot;,&quot;Temp&quot;], na.rm=T)</code></pre>
 <p>This is helpful if you want to save your dataframe so that you can quickly continue working in R whichout having to read it in as a .csv or .txt file.</p>
 <pre class="r"><code># Save your dataframe as an R datafile (.Rda)
 save(data, file=&quot;BATSdata.Rda&quot;)</code></pre>
+</div>
+<div id="load-your-rda-file" class="section level2">
+<h2>Load your Rda file</h2>
+<p>Use the function <strong><em>load()</em></strong> to bring your dataframe into the R environment.</p>
+<pre class="r"><code>load(&quot;BATSdata.Rda&quot;)</code></pre>
+</div>
+<div id="for-loops" class="section level2">
+<h2>For Loops</h2>
+<p>For loops are a fun alternative to lists for passing separate chunks of data through a function. For loops are used to iterate over a vector (run the same thing multiple times)</p>
+<pre class="r"><code>for (val in sequence)
+{
+    statement
+}</code></pre>
+<p>The ‘val’ represents a value within the vector ‘sequence’. Each ‘val’ gets passed through the ‘statement’, which is what we want R to do for us.</p>
+<p>Now let’s use a For loop to calculate the maximum temp for each cruise. We need to do a couple things before we let R calculate the max temps. First, we need to specify what our vector, which will be cruise number. Second, we need to create a place for the For loop to put our resulting data. If we don’t do that, if will just show the last value that it calculated.</p>
+<pre class="r"><code># create vector of cruise numbers that we want to look at
+cruises &lt;- c(seq(1:max(data$cruise)))
+# create vector to put the resulting data
+result &lt;- rep(NA,length(cruises))
+
+for(i in cruises){
+  result[i] &lt;- max(data[data$cruise==i,&quot;Temp&quot;], na.rm=T)
+}
+head(result)</code></pre>
+<pre><code>## [1]  3.817 24.111 21.805 20.892 20.007 21.035</code></pre>
+<pre class="r"><code>result[300]</code></pre>
+<pre><code>## [1] 22.871</code></pre>
+<p>Different goals may call for different approaches in terms of using an lapply function with lists or passing data through For loops.</p>
+<p><strong><em>Note</em></strong>: If you pass a list through a function and get an error, nothing will be returned. However, if you get an error while using a For loop, the loop will stop at the place where the error occurred. This can be very helpful when you are debugging your code.</p>
+</div>
+<div id="writing-your-own-function" class="section level2">
+<h2>Writing your own function</h2>
+<p>The are many functions already available for you in R, but sometimes you need to be able to write your own. To do this, we use <strong>function()</strong>.</p>
+<pre class="r"><code>function(x){
+  statements
+  return(something)
+}</code></pre>
+<p>For example, let’s make a function that converts celsius into farhenheit. After you run the lines containing the function, it will show up in your Environment window under “Functions”.</p>
+<pre class="r"><code>c2f &lt;- function(x){
+  degF &lt;- (x * (9/5)) +32
+  result &lt;- paste(x,&quot; degrees C is equal to &quot;,degF,&quot; degrees F&quot;, sep=&quot;&quot;)
+  return(result)
+}
+
+# now use the function to check temp of 12C
+c2f(12)</code></pre>
+<pre><code>## [1] &quot;12 degrees C is equal to 53.6 degrees F&quot;</code></pre>
+<p>Notice that ‘degF’ is not shown in your Environment window. This is because things that happen in functions stay in functions, unless you tell it to return that value.</p>
+<p><strong><em>Note</em></strong>: you can skip writing <strong>return()</strong> and just write the variable name if you want to save keystrokes.</p>
+<p>Writing your own functions can even allow you to use R to go fishing!</p>
+<pre class="r"><code># prompt &quot;Do you want to fish&quot;
+fishing &lt;- function(){
+  x &lt;- readline(&quot;Do you want to fish, y or n?&quot;)  
+  out1 &lt;- sample(0:3,1)
+  out2 &lt;- sample(0:3,1)
+  out3 &lt;- ifelse(out1 == out2, &quot;You caught a fish!&quot;, &quot;No fish for you :-(&quot;)
+  ifelse(x %in% c(&quot;y&quot;,&quot;Y&quot;), out3, &quot;Maybe next time&quot;)
+}  
+
+fishing()</code></pre>
+<pre><code>## Do you want to fish, y or n?</code></pre>
+<pre><code>## [1] &quot;Maybe next time&quot;</code></pre>
+<p>Now let’s try something a little more complicated (and science-y). The BATS dataset is comprised of multiple casts that fire bottles at the same depths but may be used for different analyses. Let’s write a function that will index the dataframe and return observations (rows) that contain measurements of either TOC or TN. For simplicity, we will limit ourselves to working with a single cruise (250).</p>
+<pre class="r"><code># subset dataframe to only look at cruise 250
+cruise.250 &lt;- data[data$cruise==250,]</code></pre>
+<p>First, we need to split up each cruise into separate casts.</p>
+<pre class="r"><code># split df into separate casts
+cast.list&lt;- split(cruise.250, cruise.250$cast)
+# identify casts containing TOC or TN collected from the same bottle
+findDOM.func &lt;- function(x){
+    DOM &lt;- x[!(is.na(x$TOC) | is.na(x$TN)),]
+    return(DOM)
+}
+# run the list through the function
+DOM.list &lt;- lapply(cast.list, findDOM.func)
+
+# alternatively, we can wirte the function within the lapply command
+DOM.list2 &lt;- lapply(cast.list, function(x){
+  DOM &lt;- x[!(is.na(x$TOC) | is.na(x$TN)),]
+  return(DOM)
+})</code></pre>
+<p>Now, check the structure of DOM.list</p>
+<pre class="r"><code>str(DOM.list)</code></pre>
+<p>You see that while DOM.list still has eight elements (one for each cast), some of them are empty while others contain data. All of the elements containing data have values for either TOC or TN. As we showed in this example, functions can be use heirarchically, so that a function can use other functions within it.</p>
+<div id="changing-a-list-to-a-dataframe" class="section level3">
+<h3>Changing a list to a dataframe</h3>
+<p>Sometimes we want to return a list back into a single dataframe. An easy way to do this is using the function <strong>rbindlist()</strong> which is in the ‘data.table’ package (you installed this earlier). sing <strong>rbindlist()</strong> alone creates an object that is both a data.table and a data.frame, which can confuse downstream processes). To solve this, we will also use the function <strong>data.frame()</strong>, which will force our new object to just be a data.frame.</p>
+<pre class="r"><code>library(data.table) # makes the package available
+
+#bind list elements into a dataframe called DOM.df
+DOM.df &lt;- data.frame(rbindlist(DOM.list))
+str(DOM.df) # check structure</code></pre>
+<pre><code>## &#39;data.frame&#39;:    28 obs. of  39 variables:
+##  $ Id         : num  1.03e+09 1.03e+09 1.03e+09 1.03e+09 1.03e+09 ...
+##  $ yyyymmdd   : int  20090911 20090911 20090911 20090911 20090911 20090911 20090911 20090911 20090911 20090911 ...
+##  $ decy       : num  2010 2010 2010 2010 2010 ...
+##  $ time       : int  1610 1610 1610 1610 1610 1610 1610 1610 1610 1610 ...
+##  $ latN       : num  31.7 31.7 31.7 31.7 31.7 ...
+##  $ lonW       : num  64.2 64.2 64.2 64.2 64.2 ...
+##  $ Depth      : num  300 400 501 600 701 ...
+##  $ Temp       : num  18 17.6 16.5 14.1 11.7 ...
+##  $ CTD_S      : num  36.5 36.5 36.3 35.8 35.5 ...
+##  $ Sal1       : num  36.5 36.5 36.3 35.8 35.5 ...
+##  $ Sig_th     : num  26.5 26.5 26.6 26.8 27.1 ...
+##  $ O2_1       : num  203 193 182 163 147 ...
+##  $ OxFix      : num  19.4 18.5 17.9 16 14.9 12.9 10.8 10.4 9.6 8.9 ...
+##  $ Anom1      : num  -27.7 -40.1 -56.7 -87.4 -116.8 ...
+##  $ CO2        : num  2109 2119 2132 NA NA ...
+##  $ Alk        : num  2387 2383 2369 NA NA ...
+##  $ NO3        : num  4.09 5.09 8.84 11.83 18.52 ...
+##  $ NO2        : num  0 0 0 NA NA NA NA NA NA NA ...
+##  $ PO4        : num  0.15 0.21 0.73 NA NA NA NA NA NA NA ...
+##  $ Si         : num  1.55 1.33 2.81 5.86 9.98 ...
+##  $ POC        : num  20.3 NA NA NA 33.3 ...
+##  $ PON        : num  4 NA NA NA 3.84 NA NA 4.06 NA NA ...
+##  $ TOC        : num  51.3 48.8 48 46.6 45.1 44.2 43.6 43.8 43.4 43.4 ...
+##  $ TN         : num  8 9.1 11.2 17.6 23.2 27 25.8 24.1 22.8 20.6 ...
+##  $ Bac        : num  1.2 1.1 NA NA NA 0.7 NA NA NA NA ...
+##  $ POP        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn        : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu      : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu      : int  1 NA 1 NA NA NA NA NA NA NA ...
+##  $ cruise.type: int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cruise     : int  250 250 250 250 250 250 250 250 250 250 ...
+##  $ cast       : int  3 3 3 3 3 3 3 3 3 3 ...
+##  $ bottle     : int  1 2 3 4 5 6 7 8 12 14 ...
+##  $ lonE       : num  296 296 296 296 296 ...</code></pre>
+</div>
 </div>
 
 
