@@ -10,7 +10,7 @@ We will be using real oceanographic datasets to learn various skills, such as ma
 ## Before we get started
 I strongly suggest that you use RStudio when working with R. This program is free and will help make your life much easier in terms of editting code and visualizing your data. You can download the latest version for either Mac or Windows [here](https://www.rstudio.com/products/rstudio/download/).
 
-R periodically releases new versions and it is good to keep your software up to date. Whenever you start R or RStudio, the version nmuber and name will be displayed in the console. You can always check the version by entering the following command into the console.
+R periodically releases new versions and it is good to keep your software up to date. Whenever you start R or RStudio, the version nmuber and name will be displayed in the console. You can always check the version by entering the following command into the console. You can find the latest version of R by following this [link](https://cran.r-project.org/).
 ```{r}
 R.Version()
 ```
