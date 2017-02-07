@@ -283,7 +283,10 @@ div.tocify {
   <a href="OceanR_03_manipulate1.html">Manipulating Data</a>
 </li>
 <li>
-  <a href="OceanR_04_merging.html">Merging Dataframes</a>
+  <a href="OceanR_04_merging.html">Making Dataframes Bigger</a>
+</li>
+<li>
+  <a href="OceanR_05_synotic_cast.html">Synoptic Cast</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -453,8 +456,8 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 <pre><code>## &#39;data.frame&#39;:    101 obs. of  4 variables:
 ##  $ cruise: chr  &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; &quot;PnB&quot; ...
 ##  $ depth : int  0 1 2 3 4 5 6 7 8 9 ...
-##  $ paramA: num  5.016 1.495 3.642 0.891 4.397 ...
-##  $ paramB: int  36 70 46 7 96 24 63 12 9 8 ...</code></pre>
+##  $ paramA: num  5.61 3.21 9.89 6.13 5 ...
+##  $ paramB: int  6 5 62 14 53 11 36 75 16 76 ...</code></pre>
 </div>
 <div id="saving-a-dataframe-as-a-.csv" class="section level2">
 <h2>Saving a dataframe as a .csv</h2>
@@ -463,7 +466,7 @@ We can now check the structure of our dataset by using the <strong>str()</strong
 First, we need to figure out where it is going to be saved. The best way to do this is to check our working directory using the function <strong>getwd()</strong></p>
 <pre class="r"><code># get the working directory
 getwd()</code></pre>
-<pre><code>## [1] &quot;/Users/paulmatson/Dropbox/OceanR&quot;</code></pre>
+<pre><code>## [1] &quot;/Users/pmatson/Dropbox/OceanR&quot;</code></pre>
 <p>If we want it to go somewhere else, we can either change the working directory using the function <strong>setwd()</strong><br />
 <br><br />
 Then we use the function <strong>write.csv()</strong> to create the file that will be saved in that directory</p>

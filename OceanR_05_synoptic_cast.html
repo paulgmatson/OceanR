@@ -434,10 +434,8 @@ cast.list &lt;- split(x, x$cast)</code></pre>
 <h2>Looking for DOM values</h2>
 <p>Our primary interest in the BATS_bottle dataset is in DOM (surprise!). However, not all of the casts made on each cruise collect DOM data. To make our life easier, we can extract data for depths that contain values for DOM, which is recorded under tha variables TOC and TN. We will do this by passing our cast list through a function that indexes observations that contain non-NA values for TOC and TN.</p>
 <pre class="r"><code># You need to download and install the package &quot;data.table&quot; before running the following code
-library(&quot;data.table&quot;)</code></pre>
-<pre><code>## 
-## This data.table install has not detected OpenMP support. It will work but slower in single threaded mode.</code></pre>
-<pre class="r"><code>DOM.list &lt;- lapply(cast.list, function(x){
+library(&quot;data.table&quot;)
+DOM.list &lt;- lapply(cast.list, function(x){
     DOM &lt;- x[!(is.na(x$TOC) | is.na(x$TN)),]
     DOM
   })
