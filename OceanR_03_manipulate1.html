@@ -747,12 +747,14 @@ DOM.list2 &lt;- lapply(cast.list, function(x){
 <p>Now, check the structure of DOM.list</p>
 <pre class="r"><code>str(DOM.list)</code></pre>
 <p>You see that while DOM.list still has eight elements (one for each cast), some of them are empty while others contain data. All of the elements containing data have values for either TOC or TN. As we showed in this example, functions can be use heirarchically, so that a function can use other functions within it.</p>
-<div id="changing-a-list-to-a-dataframe" class="section level3">
-<h3>Changing a list to a dataframe</h3>
-<p>Sometimes we want to return a list back into a single dataframe. An easy way to do this is using the function <strong>rbindlist()</strong> which is in the ‘data.table’ package (you installed this earlier). sing <strong>rbindlist()</strong> alone creates an object that is both a data.table and a data.frame, which can confuse downstream processes). To solve this, we will also use the function <strong>data.frame()</strong>, which will force our new object to just be a data.frame.</p>
-<pre class="r"><code>library(data.table) # makes the package available
-
-#bind list elements into a dataframe called DOM.df
+</div>
+<div id="changing-a-list-to-a-dataframe" class="section level2">
+<h2>Changing a list to a dataframe</h2>
+<p>Sometimes we want to return a list back into a single dataframe. An easy way to do this is using the function <strong>rbindlist()</strong> which is in the ‘data.table’ package (you installed this earlier). Using <strong>rbindlist()</strong> alone creates an object that is both a data.table and a data.frame, which can confuse downstream processes). To solve this, we will also use the function <strong>data.frame()</strong>, which will force our new object to just be a data.frame.</p>
+<pre class="r"><code>library(data.table) # makes the package available</code></pre>
+<pre><code>## 
+## This data.table install has not detected OpenMP support. It will work but slower in single threaded mode.</code></pre>
+<pre class="r"><code>#bind list elements into a dataframe called DOM.df
 DOM.df &lt;- data.frame(rbindlist(DOM.list))
 str(DOM.df) # check structure</code></pre>
 <pre><code>## &#39;data.frame&#39;:    28 obs. of  39 variables:
@@ -795,7 +797,6 @@ str(DOM.df) # check structure</code></pre>
 ##  $ cast       : int  3 3 3 3 3 3 3 3 3 3 ...
 ##  $ bottle     : int  1 2 3 4 5 6 7 8 12 14 ...
 ##  $ lonE       : num  296 296 296 296 296 ...</code></pre>
-</div>
 </div>
 
 

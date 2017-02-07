@@ -11,7 +11,7 @@
 
 
 
-<title>Merging Dataframes</title>
+<title>Making Dataframes Bigger</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -283,7 +283,10 @@ div.tocify {
   <a href="OceanR_03_manipulate1.html">Manipulating Data</a>
 </li>
 <li>
-  <a href="OceanR_04_merging.html">Merging Dataframes</a>
+  <a href="OceanR_04_merging.html">Making Dataframes Bigger</a>
+</li>
+<li>
+  <a href="OceanR_04_merging.html">Synoptic Cast</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -297,7 +300,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Merging Dataframes</h1>
+<h1 class="title toc-ignore">Making Dataframes Bigger</h1>
 
 </div>
 
@@ -306,7 +309,10 @@ div.tocify {
 <div id="adding-observations-to-dataframes" class="section level2">
 <h2>Adding observations to dataframes</h2>
 <p>Let’s suspend reality for a second and suppose that we have two separate dataframes, one from BATS cruise 200 and one from cruise 310, that we want to combine into a signle dataframe. Both dataframes have the same parameters so the number of columns will remain the same but the number of rows will change.</p>
-<pre class="r"><code>cruise.200 &lt;- data[data$cruise == 200,] # create index 
+<pre class="r"><code># if you have not yet done so, load in the BATS data
+load(&quot;BATSdata.Rda&quot;)
+
+cruise.200 &lt;- data[data$cruise == 200,] # create index 
 cruise.310 &lt;- data[data$cruise == 310,] # create index 
 
 # bind the row together, with cruise.200 first and cruise.310 second
@@ -317,7 +323,8 @@ cruise.set &lt;- rbind(cruise.200, cruise.310)
 <div id="merging" class="section level2">
 <h2>Merging</h2>
 <p>Sometimes we have measurements from new parameters that we want to add to our dataframe. We can use the function <strong><em>merge()</em></strong> to combine separate dataframes into one. In order for this to work, there has to be at least one common variable between the two dataframes, sort of like a reference key that R can use to figure out what goes where. Let’s try it first with a simplified example.</p>
-<pre class="r"><code>a &lt;- data.frame(c(1,2,3,4,5), c(1,1,1,1,1))
+<pre class="r"><code>options(stringsAsFactors=TRUE)
+a &lt;- data.frame(c(1,2,3,4,5), c(1,1,1,1,1))
 colnames(a) &lt;- c(&quot;obs&quot;, &quot;numeric&quot;)
 a</code></pre>
 <pre><code>##   obs numeric
@@ -343,6 +350,45 @@ c</code></pre>
 ## 3   3       1       c
 ## 4   4       1       d
 ## 5   5       1       e</code></pre>
+</div>
+<div id="merge-it-all-or-just-a-little" class="section level2">
+<h2>Merge it all or just a little?</h2>
+<p>Merging is not limited to smashing together two dataframes; there are a few ways we can control it to gether exactly what we want. One way is by telling R if we want to add one particular dataset to the other using the arguement <em>all.x</em> and <em>all.y</em>.</p>
+<pre class="r"><code># Create a new dataset called &#39;sub&#39;
+sub &lt;- data.frame(obs = c(1, 3, 5, 7, 9), names = c(&quot;Alpha&quot;, &quot;Beta&quot;, &quot;Charlie&quot;, &quot;Delta&quot;, &quot;Echo&quot;))
+
+d.all &lt;- merge(sub, c, all=T)
+d.all.x &lt;- merge(sub, c, all.x=T)
+d.all.y &lt;- merge(sub, c, all.y=T)</code></pre>
+<p>Notice how the resulting merged dataframes (d.all <em>vs</em> d.all.x <em>vs</em> d.all.y) differ depending on which one we choose to add onto. This gives us a useful tool to select and merge certain observations from a dataframe while leaving the unwanted observations behind.</p>
+</div>
+<div id="merging-by-what" class="section level2">
+<h2>Merging by what?</h2>
+<p>In the example above, we did not specify which columns to use in the merge. As a result, this allowed R to decide what variable is unifying the two dataframes. It uses simple logic and picks the one with the same name (in this case it was ‘obs’). What about if we are merging two dataframes where the unifying variable has a different name? This can occur when you are merging datasets that may have been created by different people using different terminology. To deal with this, we use the arguement <em>by</em>.</p>
+<pre class="r"><code>am &lt;- data.frame(obs = c(1, 2, 3, 4, 5), names = c(&quot;Alpha&quot;, &quot;Beta&quot;, &quot;Charlie&quot;, &quot;Delta&quot;, &quot;Echo&quot;), numbers = c(1, 1, 1, 2, 2))
+pm &lt;- data.frame(obs = c(6, 7, 8, 9, 10), alphas = c(&quot;Alpha&quot;, &quot;Beta&quot;, &quot;Charlie&quot;, &quot;Delta&quot;, &quot;Echo&quot;), numerics = c(1, 1, 1, 2, 2))
+
+day.all &lt;- merge(am, pm)
+allday &lt;- merge(am, pm, by.x = &quot;names&quot;, by.y = &quot;alphas&quot;, all=T)
+allday</code></pre>
+<pre><code>##     names obs.x numbers obs.y numerics
+## 1   Alpha     1       1     6        1
+## 2    Beta     2       1     7        1
+## 3 Charlie     3       1     8        1
+## 4   Delta     4       2     9        2
+## 5    Echo     5       2    10        2</code></pre>
+<p>Notice how our resulting dataframe ‘allday’ has split the column ‘obs’ so there is an ‘obs.x’ and an ‘obs.y’. This is because they have the same name but different values so it is indicating which ‘obs’ goes with which dataframe.</p>
+</div>
+<div id="creating-a-key" class="section level2">
+<h2>Creating a key</h2>
+<p>Sometimes we are fortunate to have a unique value by which we can merge two dataframes, but sometimes we do not. In these cases, we may need to create this unique value, which some refer to as a ‘key’. Can can do this by simply creating a value that incoporates information common to both dataframes. This can be such things combining a cruise number and a bottle number. To combine these variables, we use the function <strong>paste()</strong>. We need to specify how we want R to separate the two values using the ‘sep’ argument.</p>
+<pre class="r"><code># load the BATS data if you have not yet done so
+load(&quot;BATSdata.Rda&quot;)
+
+# create a key variable based on cruise and bottle and seprate using a period
+data$cruise.bottle &lt;- paste(data$cruise, data$bottle, sep = &quot;.&quot;)
+head(unique(data$cruise.bottle))</code></pre>
+<pre><code>## [1] &quot;1.12&quot; &quot;1.11&quot; &quot;1.10&quot; &quot;1.9&quot;  &quot;1.8&quot;  &quot;1.7&quot;</code></pre>
 </div>
 
 

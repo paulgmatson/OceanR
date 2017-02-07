@@ -8,8 +8,10 @@ navbar:
       href: OceanR_02_realdata.html
     - text: "Manipulating Data"
       href: OceanR_03_manipulate1.html
-    - text: "Merging Dataframes"
+    - text: "Making Dataframes Bigger"
       href: OceanR_04_merging.html
+    - text: "Synoptic Cast"
+      href: OceanR_05_synotic_cast.html
 output_dir: "."
 output:
   html_document:

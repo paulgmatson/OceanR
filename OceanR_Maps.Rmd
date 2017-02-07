@@ -1,0 +1,209 @@
+---
+title: "Map Projections in R"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+The following section borrows heavily from a tutorial written by Eric Anderson (http://eriqande.github.io/2014/12/24/plotting-sst-with-ggplot.html) for plotting MODIS SST data on a map projection using ggplot2. 
+
+I will begin with making a simple map projection and then we can get into adding an additional layers that can be applied to it. You can find many great tutorials for using ggplot2 online.
+
+## Necessary packages
+Before we get started, you are going to need to install and load the following packages:
+```{r}
+library(maptools)
+library(ggplot2)
+library(ggrepel)
+```
+
+## Creating a map projection
+R does not have repositories of the World's shorelines stored within it, so we need to get those next. You can find the latest coastline files from NOAA at http://www.ngdc.noaa.gov/mgg/shorelines/data/gshhg/latest/. 
+You will need to tell R where to find this file, so keep it in a location that makes sense.
+```{r eval=T}
+# # Shoreline map
+if (!rgeosStatus()) gpclibPermit()
+gshhs.f.b <- "/Users/pmatson/Dropbox/Maps for R/gshhg-bin-2/gshhs_f.b" # your directory path will be different
+
+```
+
+We need to specify what part of the world that we want to project. For this example, let's create a projection of the Santa Barbara Channel, which will be stored as 'shore'. It is important that you use the correct format for coordinates: they need to all be in decimal degrees, with latitude in ºN, and longitude is in ºE).   
+*Note: I frequently get an error warning after these two lines but the projection still shows up.*
+```{r}
+shore <- getRgshhsMap(gshhs.f.b, xlim = c(-120.72, -118.98), ylim = c(33.6, 34.82))
+shore <- fortify(shore)
+```
+Now let's plug it into the **ggplot()** function and take a look. Again, you can find many great tutorials online that explain the syntax of ggplot2, which differs from the base R **plot()** function.
+```{r}
+ggplot() +
+  geom_polygon(data = shore, 
+               aes(x=long, y = lat, group = group), 
+               color = "black", # controls shoreline color
+               fill = "grey80") + # controls land color
+  coord_fixed(1.3, 
+              xlim = c(-120.72, -118.98), # sets x limits (should be same as for 'shore')
+              ylim = c(33.8, 34.6)) + # sets y limits (should be same as for 'shore')
+  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  theme_bw() +
+  theme(axis.text=element_text(size=14), # controls size of axis text
+        axis.title=element_text(size=16)) # controls size of axis title 
+```
+
+Now we want to have some spatial points on our map. In this case, we are going to add in the Plumes and Blooms sampling stations.
+```{r}
+# Create dataframe for station locations
+# This can also be loaded from a csv file
+stations <- data.frame(station = c(seq(1,7,1)), lat = c(34.39158333, 34.34041667, 34.30038333, 34.25096667, 34.20093333, 34.15785, 34.08156667), lon = c(-119.839767, -119.859517, -119.8786, -119.90965, -119.928717, -119.94675, -120.0162))
+```
+
+## Adding points
+Now let's plug it into the **ggplot()** function and take a look. Again, you can find many great tutorials online that explain the syntax of ggplot2, which differs from the base R **plot()** function.
+```{r}
+ggplot() +
+  geom_polygon(data = shore, 
+               aes(x=long, y = lat, group = group), 
+               color = "black", # controls shoreline color
+               fill = "grey80") + # controls land color
+  coord_fixed(1.3, 
+              xlim = c(-120.72, -118.98), # sets x limits (should be same as for 'shore')
+              ylim = c(33.8, 34.6)) + # sets y limits (should be same as for 'shore')
+  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  geom_point(data=stations, 
+             mapping = aes(x = lon, y = lat), 
+             alpha = 1, 
+             color= "black", # controls color of point 
+             size = 2.5, # controls relative size of point
+             shape = 16) + # controls shape of point
+  geom_text(data = stations, 
+                  aes(label=station, x=lon, y=lat), 
+                  size=4, # controls text size
+                  nudge_x=-0.03) +  # change the distance between point and text (also nudge_y)
+  theme_bw() +
+  theme(axis.text=element_text(size=14), # controls size of axis text
+        axis.title=element_text(size=16)) # controls size of axis title 
+```
+
+Now try controlling the label text using **geom_text_repel** which uses repulsive textual annotations so they won't cover each other up.
+```{r}
+ggplot() +
+  geom_polygon(data = shore, 
+               aes(x=long, y = lat, group = group), 
+               color = "black", fill = "grey80") + 
+  coord_fixed(1.3, 
+              xlim = c(-120.72, -118.98), 
+              ylim = c(33.8, 34.6)) + 
+  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  geom_point(data=stations, 
+             mapping = aes(x = lon, y = lat), 
+             alpha = 1, 
+             color= "black", 
+             bg= "grey", 
+             size = 2.5,
+             shape = 16) +
+  geom_text_repel(data = stations, 
+                  aes(label=station, x=lon, y=lat), 
+                  size=4, 
+                  nudge_x=-0.03) +  
+  theme_bw() +
+  theme(axis.text=element_text(size=14), 
+        axis.title=element_text(size=16))
+```
+
+Finally, if it is difficult to see the labels, you can use **geom_label_repel** which will place a retangular box under the text label and repel each label from its neighbors, similar to **geom_text_repel**.
+```{r}
+ggplot() +
+  geom_polygon(data = shore, 
+               aes(x=long, y = lat, group = group), 
+               color = "black", 
+               fill = "grey80") + 
+  coord_fixed(1.3, 
+              xlim = c(-120.72, -118.98), 
+              ylim = c(33.8, 34.6)) + 
+  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  geom_point(data=stations, 
+             mapping = aes(x = lon, y = lat), 
+             alpha = 1, 
+             color= "black",
+             size = 2.5,
+             shape = 16) +
+  geom_label_repel(data = stations, 
+                  aes(label=station, x=lon, y=lat), 
+                  size=4, 
+                  nudge_x=-0.03) +  
+  theme_bw() +
+  theme(axis.text=element_text(size=14), 
+        axis.title=element_text(size=16))
+```
+
+Next let's try adding in another set of points to our map, in this case we will use high frequency radar stations. These will be plotted with a different style of point.
+```{r}
+# locations for hf radar stations
+hf <- data.frame(radar = c("ptm1","mgs1","ssd1","sci1","cop1","Rfg1","trl1","ptc1"),
+                 lon = c(-119.1073667, -119.2516333, -119.5961167, -119.6311667, -119.8783333,
+                         -120.0769833, -120.2322333, -120.4717), 
+                 lat=c(34.0961167, 34.2048833, 34.4190167, 33.9948333, 34.4078333, 34.4610667,
+                       34.4711333, 34.4483))
+
+ggplot() +
+  geom_polygon(data = shore, 
+               aes(x=long, y = lat, group = group), 
+               color = "black", 
+               fill = "grey80") + 
+  coord_fixed(1.3, 
+              xlim = c(-120.72, -118.98), 
+              ylim = c(33.8, 34.6)) + 
+  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  geom_point(data=stations, 
+             mapping = aes(x = lon, y = lat), 
+             alpha = 1, 
+             color= "black",
+             size = 2.5,
+             shape = 16) +
+  geom_point(data=hf, mapping = aes(x = lon, y = lat), alpha = 1, 
+             color= "black", bg= "grey", size = 4, shape = 13) +
+  geom_text_repel(data = stations, 
+                  aes(label=station, x=lon, y=lat), 
+                  size=4, 
+                  nudge_x=0.03) +
+  geom_label_repel(data = hf, 
+                  aes(label=radar, x=lon, y=lat), 
+                  size=4, 
+                  nudge_y=0.05) +
+  theme_bw() +
+  theme(axis.text=element_text(size=14), 
+        axis.title=element_text(size=16))
+```
+
+## Adding a legend 
+You need to be able to tell your reader (or your future self for that matter) the meaning of the symbols, so we need to add a legend to our map.
+```{r}
+ggplot() +
+  geom_polygon(data = shore, 
+               aes(x=long, y = lat, group = group), 
+               color = "black", 
+               fill = "grey80") + 
+  coord_fixed(1.3, 
+              xlim = c(-120.72, -118.98), 
+              ylim = c(33.8, 34.6)) + 
+  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  geom_point(data=stations, 
+             mapping = aes(x = lon, y = lat), 
+             alpha = 1, 
+             color= "black",
+             size = 2.5,
+             shape = 16) +
+  geom_point(data=hf, mapping = aes(x = lon, y = lat), alpha = 1, 
+             color= "black", bg= "grey", size = 4, shape = 13) +
+  geom_text_repel(data = stations, 
+                  aes(label=station, x=lon, y=lat), 
+                  size=4, 
+                  nudge_x=0.03) +
+  geom_label_repel(data = hf, 
+                  aes(label=radar, x=lon, y=lat), 
+                  size=4, 
+                  nudge_y=0.05) +
+  theme_bw() +
+  theme(axis.text=element_text(size=14), 
+        axis.title=element_text(size=16))
+```
+

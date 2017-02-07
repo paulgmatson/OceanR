@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Synoptic Cast</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/yeti.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 45px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+
+.section h2 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h3 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h4 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h5 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+.section h6 {
+  padding-top: 50px;
+  margin-top: -50px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">HOME</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="OceanR_01_intro.html">Intro to R</a>
+</li>
+<li>
+  <a href="OceanR_02_realdata.html">Working with real data</a>
+</li>
+<li>
+  <a href="OceanR_03_manipulate1.html">Manipulating Data</a>
+</li>
+<li>
+  <a href="OceanR_04_merging.html">Making Dataframes Bigger</a>
+</li>
+<li>
+  <a href="OceanR_05_synotic_cast.html">Synoptic Cast</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Synoptic Cast</h1>
+
+</div>
+
+
+<p>Now let’s try this out with the BATS data by creating a synoptic cast from core cruises, which will give us a general idea what the water column profile looks like for each core cruise.</p>
+<div id="target-depths" class="section level2">
+<h2>Target depths</h2>
+<p>This synoptic cast will rely on observations from targeted depths (depths which we specify ahead of time), so we need to allocate our observations from each group into the appropriate bin.</p>
+<pre class="r"><code># load in BATS data
+load(&quot;BATSdata.Rda&quot;)
+
+# limit data to core cruises (cruise.type=1)
+data &lt;- data[data$cruise.type==&quot;1&quot;,]
+
+# create breaks for assigning target depths for each bottle depth
+data$target.depth &lt;- cut(data$Depth, breaks=c(0,7, seq(13,103,10),seq(110,230,20),240,260,seq(275,4225,50),4550),
+                         labels=c(1, seq(10,120,10),seq(140,220,20),230,250,275,seq(300,4220,50),4530)) #seq takes depths 5-995 and rounds by 10; depths 1010 to 4510 and rounds to 20; ends at 4550
+
+data$target.depth &lt;- as.character(data$target.depth) # changes format from &#39;factor&#39; to &#39;character&#39;
+str(data)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    42185 obs. of  40 variables:
+##  $ Id          : num  1e+09 1e+09 1e+09 1e+09 1e+09 ...
+##  $ yyyymmdd    : int  19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 19881020 ...
+##  $ decy        : num  1989 1989 1989 1989 1989 ...
+##  $ time        : int  2230 2230 2230 2230 2230 2230 2230 2230 2230 2230 ...
+##  $ latN        : num  31.8 31.8 31.8 31.8 31.8 ...
+##  $ lonW        : num  64.1 64.1 64.1 64.1 64.1 ...
+##  $ Depth       : num  2000 2200 2399 2600 2802 ...
+##  $ Temp        : num  3.82 3.58 3.32 3.13 2.93 ...
+##  $ CTD_S       : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Sal1        : num  35 35 NA 35 34.9 ...
+##  $ Sig_th      : num  27.8 27.8 NA 27.9 27.9 ...
+##  $ O2_1        : num  256 257 NA 259 261 ...
+##  $ OxFix       : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Anom1       : num  -53.2 -53.7 NA -54.7 -54.6 -54 -55.5 NA -58.2 NA ...
+##  $ CO2         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Alk         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO3         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ NO2         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PO4         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Si          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POC         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ PON         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TOC         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TN          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Bac         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ POP         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ LSi         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu       : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu       : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cruise      : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cast        : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ bottle      : int  12 11 10 9 8 7 6 5 4 3 ...
+##  $ lonE        : num  296 296 296 296 296 ...
+##  $ target.depth: chr  &quot;2000&quot; &quot;2200&quot; &quot;2400&quot; &quot;2600&quot; ...</code></pre>
+<p>Now, take a look at what depths we have targeted</p>
+<pre class="r"><code>#this looks at unique values within vector and then convert to numeric values then sorts.
+sort(as.numeric(unique(data$target.depth))) </code></pre>
+<pre><code>##  [1]    1   10   20   30   40   50   60   70   80   90  100  110  120  140
+## [15]  160  180  200  220  230  250  275  300  350  400  450  500  550  600
+## [29]  650  700  750  800  850  900  950 1000 1050 1100 1150 1200 1250 1300
+## [43] 1350 1400 1450 1500 1600 1650 1750 1800 1850 1900 1950 2000 2050 2150
+## [57] 2200 2300 2350 2400 2450 2500 2550 2600 2750 2800 2950 3000 3150 3200
+## [71] 3350 3400 3450 3500 3550 3600 3700 3750 3800 3850 3900 3950 4000 4050
+## [85] 4100 4150 4200 4530</code></pre>
+</div>
+<div id="split-dataset-into-list-elements" class="section level2">
+<h2>Split dataset into list elements</h2>
+<p>Ok, so now things are going to get a little more complicated, because we need to treat each cast from each cruise separately. We are going to do this by breaking up our dataframe into lists, which can then be passed through functions that we are going to create (YAY!). First, let’s split up that dataframe based on cruise.</p>
+<pre class="r"><code># split dataframe based on cruise 
+cruise.list &lt;- split(data, data$cruise)</code></pre>
+<p>For the sake of simplicity, let’s focus on a single cruise for right now. We can do this by indexing our list.</p>
+<pre class="r"><code># Index list for cruise 150
+x &lt;- cruise.list[[150]]
+str(x)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    97 obs. of  40 variables:
+##  $ Id          : num  1.02e+09 1.02e+09 1.02e+09 1.02e+09 1.02e+09 ...
+##  $ yyyymmdd    : int  20010320 20010320 20010320 20010320 20010320 20010320 20010320 20010320 20010320 20010320 ...
+##  $ decy        : num  2001 2001 2001 2001 2001 ...
+##  $ time        : int  1437 1437 1437 1437 1437 1437 1437 1437 1437 1437 ...
+##  $ latN        : num  31.6 31.6 31.6 31.6 31.6 ...
+##  $ lonW        : num  64.2 64.2 64.2 64.2 64.2 ...
+##  $ Depth       : num  4 4 10.2 9.9 19.1 19.7 40.1 39.7 61.1 60.9 ...
+##  $ Temp        : num  19.7 19.7 19.7 19.7 19.7 ...
+##  $ CTD_S       : num  36.7 36.7 36.7 36.7 36.7 ...
+##  $ Sal1        : num  NA 36.7 NA 36.7 NA ...
+##  $ Sig_th      : num  26.1 26.1 26.1 26.1 26.1 ...
+##  $ O2_1        : num  221 NA 221 NA 222 ...
+##  $ OxFix       : num  19.5 17.6 19.3 17.6 19.3 17.6 19.3 17.6 19.2 17.6 ...
+##  $ Anom1       : num  -3.3 NA -3.3 NA -1.5 NA -3.2 NA -4.6 NA ...
+##  $ CO2         : num  2069 NA 2069 NA 2069 ...
+##  $ Alk         : num  NA NA 2394 NA NA ...
+##  $ NO3         : num  NA 0.06 NA 0 0 NA 0 NA 0.14 NA ...
+##  $ NO2         : num  NA NA NA NA NA NA 0.02 NA 0.03 NA ...
+##  $ PO4         : num  NA NA NA 0.05 0.05 NA 0.05 NA 0.05 NA ...
+##  $ Si          : num  NA NA NA 0.49 0.47 NA 0.44 NA 0.46 NA ...
+##  $ POC         : num  NA 25.5 NA 27.3 NA ...
+##  $ PON         : num  0 4.02 0 3.62 NA NA NA 3.97 NA NA ...
+##  $ TOC         : num  61.5 NA 61.3 NA 62 NA 60.7 NA 60.8 NA ...
+##  $ TN          : num  4.3 NA 4.1 NA 4.3 NA 4.3 NA 4.3 NA ...
+##  $ Bac         : num  NA 3.7 NA 5.3 NA 4.2 NA 4 NA 4.6 ...
+##  $ POP         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ TDP         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ SRP         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ BSi         : num  NA 9.38 NA 12.33 NA ...
+##  $ LSi         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Pro         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Syn         : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Piceu       : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ Naneu       : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ cruise.type : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ cruise      : int  150 150 150 150 150 150 150 150 150 150 ...
+##  $ cast        : int  2 2 2 2 2 2 2 2 2 2 ...
+##  $ bottle      : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ lonE        : num  296 296 296 296 296 ...
+##  $ target.depth: chr  &quot;1&quot; &quot;1&quot; &quot;10&quot; &quot;10&quot; ...</code></pre>
+<pre class="r"><code># check how many casts were made during this cruise
+unique(x$cast)</code></pre>
+<pre><code>## [1] 2 3 4 5 6 7</code></pre>
+<p>Since we will be looking at each cast separately, we now need to split our data again based on cast.</p>
+<pre class="r"><code># split dataframe based on cast
+cast.list &lt;- split(x, x$cast)</code></pre>
+</div>
+<div id="looking-for-dom-values" class="section level2">
+<h2>Looking for DOM values</h2>
+<p>Our primary interest in the BATS_bottle dataset is in DOM (surprise!). However, not all of the casts made on each cruise collect DOM data. To make our life easier, we can extract data for depths that contain values for DOM, which is recorded under tha variables TOC and TN. We will do this by passing our cast list through a function that indexes observations that contain non-NA values for TOC and TN.</p>
+<pre class="r"><code># You need to download and install the package &quot;data.table&quot; before running the following code
+library(&quot;data.table&quot;)</code></pre>
+<pre><code>## 
+## This data.table install has not detected OpenMP support. It will work but slower in single threaded mode.</code></pre>
+<pre class="r"><code>DOM.list &lt;- lapply(cast.list, function(x){
+    DOM &lt;- x[!(is.na(x$TOC) | is.na(x$TN)),]
+    DOM
+  })
+DOM &lt;- rbindlist(DOM.list)# rbindlist &quot;binds&quot; list elements into a data frame... </code></pre>
+<p>Go ahead and look at ‘DOM’ to see that all the observations have a non-NA value for TOC or TN.</p>
+</div>
+<div id="specify-nominal-depths" class="section level2">
+<h2>Specify nominal depths</h2>
+<p>Next, let’s create a new dataframe that contains the nominal depths that we want to include in our synoptic cast. You may notice that these values do not include all of the targeted depths that we previously identified.</p>
+<pre class="r"><code># create dataframe of nominal depths
+  nom.depth &lt;- data.frame(c(1,10,20,40,60,80,100,120,140,160,200,250,300,400,500,
+                            600,700,800,900,1000,1100,1200,1300,1400,1600,1800,2000,
+                            2200,2400,2600,3000,3400,3800,4000,4200,4530), 
+                          c(1,10,20,40,60,80,100,120,140,160,200,250,300,400,500,
+                            600,700,800,900,1000,1100,1200,1300,1400,1600,1800,2000,
+                            2200,2400,2600,3000,3400,3800,4000,4200,4530))
+  colnames(nom.depth) &lt;- c(&quot;nom.depth&quot;, &quot;target.depth&quot;)
+
+  # create new columns called bats.cruise and bats.type which selects the unique cruise number and id for each depth
+  nom.depth$bats.cruise&lt;-rep(unique(x[!(is.na(x$cruise)),&quot;cruise&quot;]), nrow(nom.depth)) 
+  nom.depth$bats.type&lt;-rep(unique(x[!(is.na(x$cruise.type)),&quot;cruise.type&quot;]), nrow(nom.depth))</code></pre>
+<p>Now let’s merge our two dataframes, DOM and nom.depth, together. We want to make sure that we keep all of our nominal depths, so we need to be sure to specify that the ‘all.x’ argument is set to ‘TRUE’.</p>
+<pre class="r"><code># merge DOM-casts with nom.depth to create our synoptic dataframe
+  synoptic.dom &lt;- merge(nom.depth, DOM, all.x=T)</code></pre>
+<p>Take a look at the resulting dataframe and notice that we populated it with observations from the different casts. The depths where we did not have DOM data are populated with NA values, but that is ok since we can always fill in the environmental data (temp, salinity, etc) from observations that did not contain DOM values.</p>
+</div>
+<div id="fill-in-the-synoptic-gaps" class="section level2">
+<h2>Fill in the synoptic gaps</h2>
+<p>First, let’s identify which depths are missing data</p>
+<pre class="r"><code># index synoptic depths missing data
+  missing.depths &lt;- data.frame(synoptic.dom[is.na(synoptic.dom$Id), c(&quot;target.depth&quot;)])
+  colnames(missing.depths) &lt;- &quot;target.depth&quot;
+  missing.depths$bats.cruise &lt;-rep(unique(x[!(is.na(x$cruise)),&quot;cruise&quot;]), nrow(missing.depths))
+  missing.depths$bats.type &lt;-rep(unique(x[!(is.na(x$cruise.type)),&quot;cruise.type&quot;]), nrow(missing.depths))</code></pre>
+<p>Next, let’s create a dataframe with only observations that lack DOM values and call it ‘env’. This is the dataframe that will provide us with the missing environmental data.</p>
+<pre class="r"><code> # index all depths in which TOC &amp; TN are not available
+  env.list &lt;- lapply(cast.list, function(x){
+    env &lt;- x[(is.na(x$TOC) | is.na(x$TN)),]
+    env
+  })
+  env &lt;- data.frame(rbindlist(env.list))</code></pre>
+<p>We now have to deal with the issue of having multiple environmental observations for each depth. Further, not all of these depth observations contain the same amount of information. It is in our best interests to use the ones that have the most data. To do this we will use the <strong>apply()</strong> function, which allows us to apply a function to the margins (either columns or rows) of an array or matrix (note that this differs from <strong>lapply()</strong>, which applies a function to a list). In this case, we will do this by adding the number of NA values for each row.</p>
+<pre class="r"><code># identify values of other parameters for each nominal depth to add in environmental data
+#look in dataframe env and pull out rows where target depth matches the missing depths
+  missing.env &lt;- env[env$target.depth %in% missing.depths$target.depth,] 
+# count number of NA values in each row
+  missing.env$sum.NA &lt;- apply(missing.env, 1, function(x) sum(is.na(x))) 
+  missing.env.list &lt;- split(missing.env, missing.env$target.depth)</code></pre>
+<p>Now we can create a dataframe that contains environmental observations for the missing depths and in the case where there are multiple options, chooses the one with the most data available (fewest NA values).</p>
+<pre class="r"><code># select row that has the most environmental data for each depth if multiple bottles from same depth are available
+  missing.env.values &lt;- rbindlist(lapply(missing.env.list, function(x){
+    dat &lt;- x[which.min(x$sum.NA),]
+    return(dat)}))</code></pre>
+<p>Next, let’s merge the missing synoptic depths dataframe with the new one containing the environmental data</p>
+<pre class="r"><code> # merge missing env values with missing synoptic depths
+  synoptic.missing &lt;- merge(missing.depths, missing.env.values, all.x=T)
+  synoptic.missing[,&quot;sum.NA&quot;] &lt;- NULL #this removes column &quot;sum.NA&quot; so it doesnt confuse R later</code></pre>
+<p>Now that we have a synoptic DOM dataframe and our synoptic dataframe of missing depths, we can combine them into our final synotic dataframe. Note that we don’t merge, since the dataframe do not contain the same depths. Instead, we combine them using <strong>rbind()</strong> and then order them by target depth.</p>
+<pre class="r"><code>  # combine synoptic.dom and synoptic.missing
+  synoptic.dom &lt;- synoptic.dom[!(is.na(synoptic.dom$Id)),]
+  synoptic.dom[,&quot;nom.depth&quot;] &lt;- NULL #this removes column &quot;non.depth&quot; so it doesnt confuse R later
+  names(synoptic.dom) &lt;- names(synoptic.missing) # for some reason that column names changed between dfs
+  synoptic &lt;- rbind(synoptic.dom, synoptic.missing)
+  synoptic &lt;- synoptic[order(synoptic$target.depth),]
+  synoptic</code></pre>
+<pre><code>##     target.depth bats.cruise bats.type        Id yyyymmdd     decy time
+## 1              1         150         1 1.015e+09 20010320 2001.215 1437
+## 2             10         150         1 1.015e+09 20010320 2001.215 1437
+## 3             20         150         1 1.015e+09 20010320 2001.215 1437
+## 4             40         150         1 1.015e+09 20010320 2001.215 1437
+## 5             60         150         1 1.015e+09 20010320 2001.215 1437
+## 6             80         150         1 1.015e+09 20010320 2001.215 1437
+## 7            100         150         1 1.015e+09 20010320 2001.215 1437
+## 8            120         150         1 1.015e+09 20010320 2001.215 1437
+## 9            140         150         1 1.015e+09 20010320 2001.215 1437
+## 10           160         150         1 1.015e+09 20010320 2001.215 1437
+## 11           200         150         1 1.015e+09 20010320 2001.215 1437
+## 12           250         150         1 1.015e+09 20010320 2001.215 1437
+## 13           300         150         1 1.015e+09 20010321 2001.218  922
+## 14           400         150         1 1.015e+09 20010321 2001.218  922
+## 15           500         150         1 1.015e+09 20010321 2001.218  922
+## 21           600         150         1 1.015e+09 20010321 2001.218  922
+## 17           700         150         1 1.015e+09 20010321 2001.218  922
+## 18           800         150         1 1.015e+09 20010321 2001.218  922
+## 19           900         150         1 1.015e+09 20010321 2001.218  922
+## 20          1000         150         1 1.015e+09 20010321 2001.218  922
+## 31          1100         150         1 1.015e+09 20010321 2001.218  922
+## 41          1200         150         1 1.015e+09 20010321 2001.218  922
+## 51          1300         150         1 1.015e+09 20010321 2001.218  922
+## 24          1400         150         1 1.015e+09 20010321 2001.218  922
+## 61          1600         150         1 1.015e+09 20010321 2001.218  922
+## 71          1800         150         1 1.015e+09 20010321 2001.218  922
+## 27          2000         150         1 1.015e+09 20010321 2001.218  922
+## 81          2200         150         1 1.015e+09 20010321 2001.218  922
+## 91          2400         150         1 1.015e+09 20010321 2001.218  922
+## 30          2600         150         1 1.015e+09 20010321 2001.218  922
+## 101         3000         150         1 1.015e+09 20010321 2001.218  922
+## 32          3400         150         1 1.015e+09 20010321 2001.218  922
+## 33          3800         150         1 1.015e+09 20010321 2001.218  922
+## 111         4000         150         1 1.015e+09 20010321 2001.218  922
+## 121         4200         150         1 1.015e+09 20010321 2001.218  922
+## 131         4530         150         1        NA       NA       NA   NA
+##       latN   lonW  Depth   Temp  CTD_S   Sal1 Sig_th  O2_1 OxFix  Anom1
+## 1   31.606 64.217    4.0 19.681 36.686     NA 26.135 220.7  19.5   -3.3
+## 2   31.606 64.217   10.2 19.682 36.685     NA 26.134 220.6  19.3   -3.3
+## 3   31.606 64.217   19.1 19.684 36.686     NA 26.134 222.5  19.3   -1.5
+## 4   31.606 64.217   40.1 19.679 36.684     NA 26.135 220.8  19.3   -3.2
+## 5   31.606 64.217   61.1 19.666 36.681 36.682 26.138 219.4  19.2   -4.6
+## 6   31.606 64.217   80.4 18.923 36.631 36.631 26.293 222.6  18.9   -4.6
+## 7   31.606 64.217  100.4 18.840 36.629 36.628 26.313 222.4  18.7   -5.1
+## 8   31.606 64.217  121.2 18.799 36.625 36.625 26.322 221.9  18.7   -5.8
+## 9   31.606 64.217  139.9 18.777 36.625 36.624 26.328 221.6  18.8   -6.2
+## 10  31.606 64.217  160.3 18.757 36.623 36.623 26.333 220.0  18.6   -7.9
+## 11  31.606 64.217  200.9 18.695 36.610 36.611 26.342 218.6  18.6   -9.6
+## 12  31.606 64.217  251.0 18.586 36.610 36.611 26.372 216.8  18.6  -11.8
+## 13  31.632 64.183  300.9 18.101 36.519 36.522 26.428 192.0  18.0  -38.9
+## 14  31.632 64.183  401.0 16.877 36.305 36.305 26.563 183.2  17.0  -53.4
+## 15  31.632 64.183  500.4 15.538 36.092 36.091 26.712 176.2  15.7  -67.0
+## 21  31.632 64.183  598.9 13.436 35.752 35.750 26.903 159.6  13.9  -94.7
+## 17  31.632 64.183  700.5 10.914 35.406 35.411 27.128 146.9  12.3 -121.8
+## 18  31.632 64.183  801.0  8.731 35.186 35.186 27.321 156.6  10.3 -125.6
+## 19  31.632 64.183  899.8  7.156 35.128 35.129 27.511 184.3   9.2 -108.4
+## 20  31.632 64.183 1001.6  6.125 35.098 35.098 27.626 209.6   8.6  -90.2
+## 31  31.632 64.183 1098.9  5.427 35.075 35.077 27.698 227.8   8.3  -77.0
+## 41  31.632 64.183 1198.8  4.984 35.050 35.051 27.729 238.8   8.1  -69.3
+## 51  31.632 64.183 1299.6  4.602 35.024 35.024 27.752 247.5   7.9  -63.6
+## 24  31.632 64.183 1402.0  4.296 34.999 35.001 27.768 250.7   7.8  -62.7
+## 61  31.632 64.183 1600.2  3.995 34.984 34.985 27.789 260.1   8.2  -55.7
+## 71  31.632 64.183 1800.8  3.806 34.981 34.981 27.807 261.2   7.4  -56.1
+## 27  31.632 64.183 1999.1  3.521 34.956 34.957 27.817 266.0   6.3  -53.5
+## 81  31.632 64.183 2200.7  3.416 34.964 34.964 27.834 262.8   7.1  -57.6
+## 91  31.632 64.183 2401.5  3.315 34.973 34.973 27.853 258.2   7.1  -63.0
+## 30  31.632 64.183 2598.4  3.097 34.955 34.955 27.860 260.2   7.6  -62.7
+## 101 31.632 64.183 3000.3  2.661 34.926 34.926 27.878 266.4   6.9  -60.1
+## 32  31.632 64.183 3398.2  2.357 34.906 34.906 27.890 266.6   6.5  -62.5
+## 33  31.632 64.183 3797.6  2.247 34.895 34.895 27.894 264.2   6.5  -65.9
+## 111 31.632 64.183 3999.6  2.226 34.891 34.891 27.894 264.1   6.1  -66.1
+## 121 31.632 64.183 4203.5  2.221 34.888 34.887 27.893 261.3   6.9  -69.0
+## 131     NA     NA     NA     NA     NA     NA     NA    NA    NA     NA
+##        CO2    Alk   NO3  NO2  PO4    Si   POC  PON  TOC   TN Bac POP TDP
+## 1   2068.8     NA    NA   NA   NA    NA    NA 0.00 61.5  4.3  NA  NA  NA
+## 2   2069.2 2394.5    NA   NA   NA    NA    NA 0.00 61.3  4.1  NA  NA  NA
+## 3   2069.2     NA  0.00   NA 0.05  0.47    NA   NA 62.0  4.3  NA  NA  NA
+## 4   2069.2 2390.6  0.00 0.02 0.05  0.44    NA   NA 60.7  4.3  NA  NA  NA
+## 5   2068.8 2388.2  0.14 0.03 0.05  0.46    NA   NA 60.8  4.3  NA  NA  NA
+## 6   2074.5 2386.4  0.64 0.13 0.06  0.54    NA   NA 60.9  4.9  NA  NA  NA
+## 7   2073.4 2391.3  0.73 0.20 0.06  0.56    NA   NA 61.1  4.7  NA  NA  NA
+## 8   2074.2     NA  0.84   NA 0.08  0.54    NA   NA 59.5  4.9  NA  NA  NA
+## 9   2073.8 2389.0  0.89 0.20 0.09  0.56    NA   NA 57.8  4.9  NA  NA  NA
+## 10  2077.5 2391.3  1.05 0.21 0.09  0.54    NA   NA 55.2  5.1  NA  NA  NA
+## 11  2076.0     NA  1.25   NA 0.12  0.56    NA   NA 53.0  5.1  NA  NA  NA
+## 12  2083.4 2389.1  1.81 0.10 0.13  0.62    NA   NA 51.0  6.0  NA  NA  NA
+## 13      NA     NA  4.64   NA 0.31  1.52 16.17 1.77 49.8  8.5 0.9  NA  NA
+## 14      NA     NA  7.73   NA 0.40  2.46 12.01 2.30 48.6 11.6 0.7  NA  NA
+## 15      NA     NA 10.87   NA 0.61  3.69  4.94 1.25   NA   NA  NA  NA  NA
+## 21      NA     NA 16.10   NA 0.91  6.76  6.63 0.80   NA   NA  NA  NA  NA
+## 17      NA     NA 20.78   NA 1.25 10.92  9.64 1.15 46.6 24.7  NA  NA  NA
+## 18      NA     NA 22.19   NA 1.39 13.51  8.57 0.97 45.2 27.1 0.5  NA  NA
+## 19      NA     NA 21.31   NA 1.34 13.60  9.05 0.92 43.9 25.6  NA  NA  NA
+## 20      NA     NA 20.01   NA 1.27 12.86  5.22 0.80 42.6 23.3  NA  NA  NA
+## 31      NA     NA 19.18   NA 1.23 12.38    NA   NA   NA   NA  NA  NA  NA
+## 41      NA     NA 18.81   NA 1.21 12.08    NA   NA   NA   NA  NA  NA  NA
+## 51      NA     NA 18.54   NA 1.19 12.07    NA   NA   NA   NA 0.4  NA  NA
+## 24      NA     NA 18.27   NA 1.18 12.05    NA   NA 42.8 21.5  NA  NA  NA
+## 61      NA     NA 18.12   NA 1.17 12.75    NA   NA   NA   NA  NA  NA  NA
+## 71      NA     NA 18.15   NA 1.17 14.07    NA   NA   NA   NA  NA  NA  NA
+## 27      NA     NA 18.01   NA 1.17 14.66    NA   NA 43.5 21.2  NA  NA  NA
+## 81      NA     NA 18.23   NA 1.19 16.44    NA   NA   NA   NA  NA  NA  NA
+## 91      NA     NA 18.86   NA 1.24 20.16    NA   NA   NA   NA  NA  NA  NA
+## 30      NA     NA 18.67   NA 1.23 20.86    NA   NA 43.8 21.9  NA  NA  NA
+## 101     NA     NA 18.23   NA 1.21 22.07    NA   NA   NA   NA 0.3  NA  NA
+## 32      NA     NA 18.45   NA 1.23 26.09    NA   NA 43.6 21.6  NA  NA  NA
+## 33      NA     NA 18.97   NA 1.28 30.28    NA   NA 43.0 22.5  NA  NA  NA
+## 111     NA     NA 19.39   NA 1.31 32.14    NA   NA   NA   NA 0.2  NA  NA
+## 121     NA     NA 19.53   NA 1.31 34.16    NA   NA   NA   NA  NA  NA  NA
+## 131     NA     NA    NA   NA   NA    NA    NA   NA   NA   NA  NA  NA  NA
+##     SRP BSi LSi Pro Syn Piceu Naneu cruise.type cruise cast bottle    lonE
+## 1    NA  NA  NA  NA  NA    NA    NA           1    150    2      1 295.783
+## 2    NA  NA  NA  NA  NA    NA    NA           1    150    2      3 295.783
+## 3    NA  NA  NA  NA  NA    NA    NA           1    150    2      5 295.783
+## 4    NA  NA  NA  NA  NA    NA    NA           1    150    2      7 295.783
+## 5    NA  NA  NA  NA  NA    NA    NA           1    150    2      9 295.783
+## 6    NA  NA  NA  NA  NA    NA    NA           1    150    2     11 295.783
+## 7    NA  NA  NA  NA  NA    NA    NA           1    150    2     13 295.783
+## 8    NA  NA  NA  NA  NA    NA    NA           1    150    2     15 295.783
+## 9    NA  NA  NA  NA  NA    NA    NA           1    150    2     17 295.783
+## 10   NA  NA  NA  NA  NA    NA    NA           1    150    2     19 295.783
+## 11   NA  NA  NA  NA  NA    NA    NA           1    150    2     21 295.783
+## 12   NA  NA  NA  NA  NA    NA    NA           1    150    2     23 295.783
+## 13   NA  NA  NA  NA  NA    NA    NA           1    150    4      1 295.817
+## 14   NA  NA  NA  NA  NA    NA    NA           1    150    4      2 295.817
+## 15   NA  NA  NA  NA  NA    NA    NA           1    150    4      3 295.817
+## 21   NA  NA  NA  NA  NA    NA    NA           1    150    4      4 295.817
+## 17   NA  NA  NA  NA  NA    NA    NA           1    150    4      5 295.817
+## 18   NA  NA  NA  NA  NA    NA    NA           1    150    4      6 295.817
+## 19   NA  NA  NA  NA  NA    NA    NA           1    150    4      7 295.817
+## 20   NA  NA  NA  NA  NA    NA    NA           1    150    4      8 295.817
+## 31   NA  NA  NA  NA  NA    NA    NA           1    150    4      9 295.817
+## 41   NA  NA  NA  NA  NA    NA    NA           1    150    4     10 295.817
+## 51   NA  NA  NA  NA  NA    NA    NA           1    150    4     11 295.817
+## 24   NA  NA  NA  NA  NA    NA    NA           1    150    4     12 295.817
+## 61   NA  NA  NA  NA  NA    NA    NA           1    150    4     13 295.817
+## 71   NA  NA  NA  NA  NA    NA    NA           1    150    4     14 295.817
+## 27   NA  NA  NA  NA  NA    NA    NA           1    150    4     15 295.817
+## 81   NA  NA  NA  NA  NA    NA    NA           1    150    4     16 295.817
+## 91   NA  NA  NA  NA  NA    NA    NA           1    150    4     17 295.817
+## 30   NA  NA  NA  NA  NA    NA    NA           1    150    4     18 295.817
+## 101  NA  NA  NA  NA  NA    NA    NA           1    150    4     19 295.817
+## 32   NA  NA  NA  NA  NA    NA    NA           1    150    4     21 295.817
+## 33   NA  NA  NA  NA  NA    NA    NA           1    150    4     22 295.817
+## 111  NA  NA  NA  NA  NA    NA    NA           1    150    4     23 295.817
+## 121  NA  NA  NA  NA  NA    NA    NA           1    150    4     24 295.817
+## 131  NA  NA  NA  NA  NA    NA    NA          NA     NA   NA     NA      NA</code></pre>
+<p>Congrats, you created a synoptic cast for a single cruise! But what about the other 309 cruises?!?</p>
+</div>
+<div id="using-lists-to-process-lots-of-data" class="section level2">
+<h2>Using lists to process lots of data</h2>
+<p>The code that we have written nedds to look at each cruise separately but we don’t want to have to run one at a time. To get around this, we can take all of the code that we just wrote to create a synotic cast for a single cruise and apply it to each element of a list that is split up into separate cruises.</p>
+<p>Below is a basic outline of what it would look like, with the “…” being all of the code from above. Try it out on your own.</p>
+<pre class="r"><code># create a function to build a synoptic cast for each BATS cruise
+synoptic.func &lt;- function(x){
+  # split dataframe based on cast
+  cast.list &lt;- split(x, x$cast)
+  ...
+  ...
+  synoptic
+}</code></pre>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

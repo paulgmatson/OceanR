@@ -1,0 +1,171 @@
+---
+title: "Synoptic Cast"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+Now let's try this out with the BATS data by creating a synoptic cast from core cruises, which will give us a general idea what the water column profile looks like for each core cruise. 
+
+## Target depths
+This synoptic cast will rely on observations from targeted depths (depths which we specify ahead of time), so we need to allocate our observations from each group into the appropriate bin.  
+```{r}
+# load in BATS data
+load("BATSdata.Rda")
+
+# limit data to core cruises (cruise.type=1)
+data <- data[data$cruise.type=="1",]
+
+# create breaks for assigning target depths for each bottle depth
+data$target.depth <- cut(data$Depth, breaks=c(0,7, seq(13,103,10),seq(110,230,20),240,260,seq(275,4225,50),4550),
+                         labels=c(1, seq(10,120,10),seq(140,220,20),230,250,275,seq(300,4220,50),4530)) #seq takes depths 5-995 and rounds by 10; depths 1010 to 4510 and rounds to 20; ends at 4550
+
+data$target.depth <- as.character(data$target.depth) # changes format from 'factor' to 'character'
+str(data)
+```
+
+Now, take a look at what depths we have targeted
+```{r}
+#this looks at unique values within vector and then convert to numeric values then sorts.
+sort(as.numeric(unique(data$target.depth))) 
+
+```
+  
+## Split dataset into list elements
+Ok, so now things are going to get a little more complicated, because we need to treat each cast from each cruise separately. We are going to do this by breaking up our dataframe into lists, which can then be passed through functions that we are going to create (YAY!). First, let's split up that dataframe based on cruise.
+```{r}
+# split dataframe based on cruise 
+cruise.list <- split(data, data$cruise)
+
+```
+  
+For the sake of simplicity, let's focus on a single cruise for right now. We can do this by indexing our list.
+```{r}
+# Index list for cruise 150
+x <- cruise.list[[150]]
+str(x)
+# check how many casts were made during this cruise
+unique(x$cast)
+```
+  
+Since we will be looking at each cast separately, we now need to split our data again based on cast. 
+```{r}
+# split dataframe based on cast
+cast.list <- split(x, x$cast)
+```
+
+## Looking for DOM values
+Our primary interest in the BATS_bottle dataset is in DOM (surprise!). However, not all of the casts made on each cruise collect DOM data. To make our life easier, we can extract data for depths that contain values for DOM, which is recorded under tha variables TOC and TN. We will do this by passing our cast list through a function that indexes observations that contain non-NA values for TOC and TN.
+```{r}
+# You need to download and install the package "data.table" before running the following code
+library("data.table")
+DOM.list <- lapply(cast.list, function(x){
+    DOM <- x[!(is.na(x$TOC) | is.na(x$TN)),]
+    DOM
+  })
+DOM <- rbindlist(DOM.list)# rbindlist "binds" list elements into a data frame... 
+```
+Go ahead and look at 'DOM' to see that all the observations have a non-NA value for TOC or TN.  
+  
+## Specify nominal depths
+Next, let's create a new dataframe that contains the nominal depths that we want to include in our synoptic cast. You may notice that these values do not include all of the targeted depths that we previously identified. 
+```{r}
+# create dataframe of nominal depths
+  nom.depth <- data.frame(c(1,10,20,40,60,80,100,120,140,160,200,250,300,400,500,
+                            600,700,800,900,1000,1100,1200,1300,1400,1600,1800,2000,
+                            2200,2400,2600,3000,3400,3800,4000,4200,4530), 
+                          c(1,10,20,40,60,80,100,120,140,160,200,250,300,400,500,
+                            600,700,800,900,1000,1100,1200,1300,1400,1600,1800,2000,
+                            2200,2400,2600,3000,3400,3800,4000,4200,4530))
+  colnames(nom.depth) <- c("nom.depth", "target.depth")
+
+  # create new columns called bats.cruise and bats.type which selects the unique cruise number and id for each depth
+  nom.depth$bats.cruise<-rep(unique(x[!(is.na(x$cruise)),"cruise"]), nrow(nom.depth)) 
+  nom.depth$bats.type<-rep(unique(x[!(is.na(x$cruise.type)),"cruise.type"]), nrow(nom.depth))
+
+```
+
+Now let's merge our two dataframes, DOM and nom.depth, together. We want to make sure that we keep all of our nominal depths, so we need to be sure to specify that the 'all.x' argument is set to 'TRUE'. 
+```{r}
+# merge DOM-casts with nom.depth to create our synoptic dataframe
+  synoptic.dom <- merge(nom.depth, DOM, all.x=T)
+```
+  
+Take a look at the resulting dataframe and notice that we populated it with observations from the different casts. The depths where we did not have DOM data are populated with NA values, but that is ok since we can always fill in the environmental data (temp, salinity, etc) from observations that did not contain DOM values.  
+
+## Fill in the synoptic gaps
+First, let's identify which depths are missing data
+```{r}
+# index synoptic depths missing data
+  missing.depths <- data.frame(synoptic.dom[is.na(synoptic.dom$Id), c("target.depth")])
+  colnames(missing.depths) <- "target.depth"
+  missing.depths$bats.cruise <-rep(unique(x[!(is.na(x$cruise)),"cruise"]), nrow(missing.depths))
+  missing.depths$bats.type <-rep(unique(x[!(is.na(x$cruise.type)),"cruise.type"]), nrow(missing.depths))
+```
+
+Next, let's create a dataframe with only observations that lack DOM values and call it 'env'. This is the dataframe that will provide us with the missing environmental data.
+```{r}
+ # index all depths in which TOC & TN are not available
+  env.list <- lapply(cast.list, function(x){
+    env <- x[(is.na(x$TOC) | is.na(x$TN)),]
+    env
+  })
+  env <- data.frame(rbindlist(env.list))
+```
+  
+We now have to deal with the issue of having multiple environmental observations for each depth. Further, not all of these depth observations contain the same amount of information. It is in our best interests to use the ones that have the most data. To do this we will use the **apply()** function, which allows us to apply a function to the margins (either columns or rows) of an array or matrix (note that this differs from **lapply()**, which applies a function to a list). In this case, we will do this by adding the number of NA values for each row. 
+```{r}
+# identify values of other parameters for each nominal depth to add in environmental data
+#look in dataframe env and pull out rows where target depth matches the missing depths
+  missing.env <- env[env$target.depth %in% missing.depths$target.depth,] 
+# count number of NA values in each row
+  missing.env$sum.NA <- apply(missing.env, 1, function(x) sum(is.na(x))) 
+  missing.env.list <- split(missing.env, missing.env$target.depth)
+```
+
+Now we can create a dataframe that contains environmental observations for the missing depths and in the case where there are multiple options, chooses the one with the most data available (fewest NA values).
+```{r}
+# select row that has the most environmental data for each depth if multiple bottles from same depth are available
+  missing.env.values <- rbindlist(lapply(missing.env.list, function(x){
+    dat <- x[which.min(x$sum.NA),]
+    return(dat)}))
+
+```
+
+Next, let's merge the missing synoptic depths dataframe with the new one containing the environmental data
+```{r}
+ # merge missing env values with missing synoptic depths
+  synoptic.missing <- merge(missing.depths, missing.env.values, all.x=T)
+  synoptic.missing[,"sum.NA"] <- NULL #this removes column "sum.NA" so it doesnt confuse R later
+
+```
+
+Now that we have a synoptic DOM dataframe and our synoptic dataframe of missing depths, we can combine them into our final synotic dataframe. Note that we don't merge, since the dataframe do not contain the same depths. Instead, we combine them using **rbind()** and then order them by target depth.
+```{r}
+  # combine synoptic.dom and synoptic.missing
+  synoptic.dom <- synoptic.dom[!(is.na(synoptic.dom$Id)),]
+  synoptic.dom[,"nom.depth"] <- NULL #this removes column "non.depth" so it doesnt confuse R later
+  names(synoptic.dom) <- names(synoptic.missing) # for some reason that column names changed between dfs
+  synoptic <- rbind(synoptic.dom, synoptic.missing)
+  synoptic <- synoptic[order(synoptic$target.depth),]
+  synoptic
+```
+Congrats, you created a synoptic cast for a single cruise! But what about the other 309 cruises?!? 
+
+## Using lists to process lots of data
+The code that we have written nedds to look at each cruise separately but we don't want to have to run one at a time. To get around this, we can take all of the code that we just wrote to create a synotic cast for a single cruise and apply it to each element of a list that is split up into separate cruises.   
+  
+Below is a basic outline of what it would look like, with the "..." being all of the code from above. Try it out on your own.
+```{r eval=F}
+# create a function to build a synoptic cast for each BATS cruise
+synoptic.func <- function(x){
+  # split dataframe based on cast
+  cast.list <- split(x, x$cast)
+  ...
+  ...
+  synoptic
+}
+
+```
+
+

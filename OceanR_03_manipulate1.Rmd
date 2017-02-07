@@ -234,8 +234,8 @@ str(DOM.list)
 
 You see that while DOM.list still has eight elements (one for each cast), some of them are empty while others contain data. All of the elements containing data have values for either TOC or TN. As we showed in this example, functions can be use heirarchically, so that a function can use other functions within it. 
 
-### Changing a list to a dataframe
-Sometimes we want to return a list back into a single dataframe. An easy way to do this is using the function **rbindlist()** which is in the 'data.table' package (you installed this earlier). sing **rbindlist()** alone creates an object that is both a data.table and a data.frame, which can confuse downstream processes). To solve this, we will also use the function **data.frame()**, which will force our new object to just be a data.frame.
+## Changing a list to a dataframe
+Sometimes we want to return a list back into a single dataframe. An easy way to do this is using the function **rbindlist()** which is in the 'data.table' package (you installed this earlier). Using **rbindlist()** alone creates an object that is both a data.table and a data.frame, which can confuse downstream processes). To solve this, we will also use the function **data.frame()**, which will force our new object to just be a data.frame.
 ```{r}
 library(data.table) # makes the package available
 

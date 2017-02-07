@@ -1,19 +1,19 @@
 ---
-title: "Merging Dataframes"
+title: "Making Dataframes Bigger"
 output: 
   html_document:
     toc: true
     toc_float: true
 ---
-```{r echo=F}
-load("BATSdata.Rda")
-```
 
 Next we will look at how we expand our dataframes. Sometimes this is just by adding new observations of the same parameters (adding rows). Other times we want to add new parameters (adding columns). Finally, sometimes we want to pick and choose information from different sources and combine it into a single dataframe (merging).
 
 ## Adding observations to dataframes
 Let's suspend reality for a second and suppose that we have two separate dataframes, one from BATS cruise 200 and one from cruise 310, that we want to combine into a signle dataframe. Both dataframes have the same parameters so the number of columns will remain the same but the number of rows will change.
 ```{r}
+# if you have not yet done so, load in the BATS data
+load("BATSdata.Rda")
+
 cruise.200 <- data[data$cruise == 200,] # create index 
 cruise.310 <- data[data$cruise == 310,] # create index 
 
@@ -26,6 +26,7 @@ cruise.set <- rbind(cruise.200, cruise.310)
 ## Merging
 Sometimes we have measurements from new parameters that we want to add to our dataframe. We can use the function ***merge()*** to combine separate dataframes into one. In order for this to work, there has to be at least one common variable between the two dataframes, sort of like a reference key that R can use to figure out what goes where. Let's try it first with a simplified example.
 ```{r}
+options(stringsAsFactors=TRUE)
 a <- data.frame(c(1,2,3,4,5), c(1,1,1,1,1))
 colnames(a) <- c("obs", "numeric")
 a
@@ -35,4 +36,42 @@ b
 c <- merge(a,b)
 c
 ```
+  
+## Merge it all or just a little?  
+Merging is not limited to smashing together two dataframes; there are a few ways we can control it to gether exactly what we want. One way is by telling R if we want to add one particular dataset to the other using the arguement *all.x* and *all.y*.
+
+```{r}
+# Create a new dataset called 'sub'
+sub <- data.frame(obs = c(1, 3, 5, 7, 9), names = c("Alpha", "Beta", "Charlie", "Delta", "Echo"))
+
+d.all <- merge(sub, c, all=T)
+d.all.x <- merge(sub, c, all.x=T)
+d.all.y <- merge(sub, c, all.y=T)
+```
+Notice how the resulting merged dataframes (d.all *vs* d.all.x *vs* d.all.y) differ depending on which one we choose to add onto. This gives us a useful tool to select and merge certain observations from a dataframe while leaving the unwanted observations behind.
+
+## Merging by what?  
+In the example above, we did not specify which columns to use in the merge. As a result, this allowed R to decide what variable is unifying the two dataframes. It uses simple logic and picks the one with the same name (in this case it was 'obs'). What about if we are merging two dataframes where the unifying variable has a different name? This can occur when you are merging datasets that may have been created by different people using different terminology. To deal with this, we use the arguement *by*.
+```{r}
+am <- data.frame(obs = c(1, 2, 3, 4, 5), names = c("Alpha", "Beta", "Charlie", "Delta", "Echo"), numbers = c(1, 1, 1, 2, 2))
+pm <- data.frame(obs = c(6, 7, 8, 9, 10), alphas = c("Alpha", "Beta", "Charlie", "Delta", "Echo"), numerics = c(1, 1, 1, 2, 2))
+
+day.all <- merge(am, pm)
+allday <- merge(am, pm, by.x = "names", by.y = "alphas", all=T)
+allday
+```
+Notice how our resulting dataframe 'allday' has split the column 'obs' so there is an 'obs.x' and an 'obs.y'. This is because they have the same name but different values so it is indicating which 'obs' goes with which dataframe. 
+
+## Creating a key
+Sometimes we are fortunate to have a unique value by which we can merge two dataframes, but sometimes we do not. In these cases, we may need to create this unique value, which some refer to as a 'key'. Can can do this by simply creating a value that incoporates information common to both dataframes. This can be such things combining a cruise number and a bottle number. To combine these variables, we use the function **paste()**. We need to specify how we want R to separate the two values using the 'sep' argument. 
+```{r}
+# load the BATS data if you have not yet done so
+load("BATSdata.Rda")
+
+# create a key variable based on cruise and bottle and seprate using a period
+data$cruise.bottle <- paste(data$cruise, data$bottle, sep = ".")
+head(unique(data$cruise.bottle))
+```
+
+
 
