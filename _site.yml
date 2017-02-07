@@ -11,7 +11,7 @@ navbar:
     - text: "Making Dataframes Bigger"
       href: OceanR_04_merging.html
     - text: "Synoptic Cast"
-      href: OceanR_05_synotic_cast.html
+      href: OceanR_05_synoptic_cast.html
 output_dir: "."
 output:
   html_document:
