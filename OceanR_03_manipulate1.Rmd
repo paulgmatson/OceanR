@@ -35,22 +35,22 @@ If we want to know what unique values are present within a particular data colum
 unique(data$cruise)
 ```
 
-Perhaps we we are less concerned with getting all of the values and more interested in figuring out the range in values. We can check this using the **range()** function.
+Perhaps we we are less concerned with getting all of the values and more interested in figuring out the range in values. We can check this using the **range()** function. When using this function, it is good practice to set the arguement 'na.rm' to True so that NA values are ignored. Otherwise, the function will return 'NA NA'. This is also the case for other basic statistical functions.
 ```{r}
 # check the range in cruises in 'data'
-range(data$cruise)
+range(data$cruise, na.rm=T)
 ```
 This is also very helpful when we are looking at other variables.
 ```{r}
 # check the range in depths in 'data'
-range(data$Depth)
+range(data$Depth, na.rm=T)
 
 ```
 
 ## Indexing  
 ```{r include = FALSE}
-BATS.start <- substr(range(data$yyyymmdd)[1], 1, 4)
-BATS.end <- substr(range(data$yyyymmdd)[2], 1, 4)
+BATS.start <- substr(range(data$yyyymmdd, na.rm=T)[1], 1, 4)
+BATS.end <- substr(range(data$yyyymmdd, na.rm=T)[2], 1, 4)
 ```
 
 The BATS dataset represents a long time series, ranging from `r BATS.start` to `r BATS.end`. Sometimes we do not want to deal with data from all of the cruises. To select specific chunks of data, perhaps for a particular cruise, we can index our dataframe.  
@@ -75,7 +75,7 @@ Indexing is not limited to a single variable; we can add in as many criteria as 
 x <- data[data$cruise %in% c("289", "290", "300") & data$Depth >= 100 & data$Depth <= 1000,]
 str(x)
 unique(x$cruise)
-range(x$Depth)
+range(x$Depth, na.rm=T)
 ```
 
 ## Creating Lists

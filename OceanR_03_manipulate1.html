@@ -396,13 +396,13 @@ unique(data$cruise)</code></pre>
 ## [273] 273 274 275 276 277 278 279 280 281 282 283 284 285 286 287 288 289
 ## [290] 290 291 292 293 294 295 296 297 298 299 300 301 302 303 304 305 306
 ## [307] 307 308 309 310</code></pre>
-<p>Perhaps we we are less concerned with getting all of the values and more interested in figuring out the range in values. We can check this using the <strong>range()</strong> function.</p>
+<p>Perhaps we we are less concerned with getting all of the values and more interested in figuring out the range in values. We can check this using the <strong>range()</strong> function. When using this function, it is good practice to set the arguement ‘na.rm’ to True so that NA values are ignored. Otherwise, the function will return ‘NA NA’. This is also the case for other basic statistical functions.</p>
 <pre class="r"><code># check the range in cruises in &#39;data&#39;
-range(data$cruise)</code></pre>
+range(data$cruise, na.rm=T)</code></pre>
 <pre><code>## [1]   1 310</code></pre>
 <p>This is also very helpful when we are looking at other variables.</p>
 <pre class="r"><code># check the range in depths in &#39;data&#39;
-range(data$Depth)</code></pre>
+range(data$Depth, na.rm=T)</code></pre>
 <pre><code>## [1]    0.3 8587.0</code></pre>
 </div>
 <div id="indexing" class="section level2">
@@ -546,7 +546,7 @@ str(x)</code></pre>
 ##  $ lonE       : num  296 296 296 296 296 ...</code></pre>
 <pre class="r"><code>unique(x$cruise)</code></pre>
 <pre><code>## [1] 289 290 300</code></pre>
-<pre class="r"><code>range(x$Depth)</code></pre>
+<pre class="r"><code>range(x$Depth, na.rm=T)</code></pre>
 <pre><code>## [1] 100.1 999.0</code></pre>
 </div>
 <div id="creating-lists" class="section level2">
