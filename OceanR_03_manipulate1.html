@@ -286,7 +286,7 @@ div.tocify {
   <a href="OceanR_04_merging.html">Making Dataframes Bigger</a>
 </li>
 <li>
-  <a href="OceanR_05_synotic_cast.html">Synoptic Cast</a>
+  <a href="OceanR_05_synoptic_cast.html">Synoptic Cast</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -754,10 +754,9 @@ DOM.list2 &lt;- lapply(cast.list, function(x){
 <div id="changing-a-list-to-a-dataframe" class="section level2">
 <h2>Changing a list to a dataframe</h2>
 <p>Sometimes we want to return a list back into a single dataframe. An easy way to do this is using the function <strong>rbindlist()</strong> which is in the ‘data.table’ package (you installed this earlier). Using <strong>rbindlist()</strong> alone creates an object that is both a data.table and a data.frame, which can confuse downstream processes). To solve this, we will also use the function <strong>data.frame()</strong>, which will force our new object to just be a data.frame.</p>
-<pre class="r"><code>library(data.table) # makes the package available</code></pre>
-<pre><code>## 
-## This data.table install has not detected OpenMP support. It will work but slower in single threaded mode.</code></pre>
-<pre class="r"><code>#bind list elements into a dataframe called DOM.df
+<pre class="r"><code>library(data.table) # makes the package available
+
+#bind list elements into a dataframe called DOM.df
 DOM.df &lt;- data.frame(rbindlist(DOM.list))
 str(DOM.df) # check structure</code></pre>
 <pre><code>## &#39;data.frame&#39;:    28 obs. of  39 variables:
