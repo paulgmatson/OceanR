@@ -23,7 +23,7 @@ You will need to tell R where to find this file, so keep it in a location that m
 ```{r eval=T}
 # # Shoreline map
 if (!rgeosStatus()) gpclibPermit()
-gshhs.f.b <- "/Users/pmatson/Dropbox/Maps for R/gshhg-bin-2/gshhs_f.b" # your directory path will be different
+gshhs.f.b <- "/Users/paulmatson/Dropbox/Maps for R/gshhg-bin-2/gshhs_f.b" # your directory path will be different
 
 ```
 
@@ -43,7 +43,7 @@ ggplot() +
   coord_fixed(1.3, 
               xlim = c(-120.72, -118.98), # sets x limits (should be same as for 'shore')
               ylim = c(33.8, 34.6)) + # sets y limits (should be same as for 'shore')
-  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
   theme_bw() +
   theme(axis.text=element_text(size=14), # controls size of axis text
         axis.title=element_text(size=16)) # controls size of axis title 
@@ -67,7 +67,7 @@ ggplot() +
   coord_fixed(1.3, 
               xlim = c(-120.72, -118.98), # sets x limits (should be same as for 'shore')
               ylim = c(33.8, 34.6)) + # sets y limits (should be same as for 'shore')
-  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
   geom_point(data=stations, 
              mapping = aes(x = lon, y = lat), 
              alpha = 1, 
@@ -92,7 +92,7 @@ ggplot() +
   coord_fixed(1.3, 
               xlim = c(-120.72, -118.98), 
               ylim = c(33.8, 34.6)) + 
-  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
   geom_point(data=stations, 
              mapping = aes(x = lon, y = lat), 
              alpha = 1, 
@@ -119,7 +119,7 @@ ggplot() +
   coord_fixed(1.3, 
               xlim = c(-120.72, -118.98), 
               ylim = c(33.8, 34.6)) + 
-  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
   geom_point(data=stations, 
              mapping = aes(x = lon, y = lat), 
              alpha = 1, 
@@ -152,7 +152,7 @@ ggplot() +
   coord_fixed(1.3, 
               xlim = c(-120.72, -118.98), 
               ylim = c(33.8, 34.6)) + 
-  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
   geom_point(data=stations, 
              mapping = aes(x = lon, y = lat), 
              alpha = 1, 
@@ -185,7 +185,7 @@ ggplot() +
   coord_fixed(1.3, 
               xlim = c(-120.72, -118.98), 
               ylim = c(33.8, 34.6)) + 
-  labs(x="Longitude (ºE)", y="Latitude (ºN)") + 
+  labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
   geom_point(data=stations, 
              mapping = aes(x = lon, y = lat), 
              alpha = 1, 
@@ -206,4 +206,52 @@ ggplot() +
   theme(axis.text=element_text(size=14), 
         axis.title=element_text(size=16))
 ```
+ 
+## Adding in bathymetry
+If you want to add another layer of information to your map, you can incorporate bathymetry using the package "marmap", which you can install using the **install.packages()** function. This package includes a function queries and downloads bathymetric data from NOAA's ETOPO1 database using coordinates that you provide. Note: the default resolution is 4 minutes of a degree.
+```{r}
+# load marmap package
+library(marmap)
+
+#query of ETOPO1 data base on NOAA server for bathymetric data, the resolution default is 4 minutes of degree, keep saves the data to a local drive so it doesn't have to quire the NOAA data base, 
+bathmap <- getNOAA.bathy(lon1 = -120.72, lon2 = -118.98, 
+                         lat1 = 34.6, lat2 = 33.8, resolution = 1, keep = TRUE)
+
+#turn matrix into a data frame
+bathmap_df <- fortify.bathy(bathmap)
+
+ggplot() +
+  geom_contour(data=bathmap_df, aes(x = x, y = y, z = z), 
+               bins = 60, # the number of bins determines how many possible depth contours are included
+               color = "grey60") + # you can change color of the contours
+  geom_polygon(data = shore, 
+               aes(x=long, y = lat, group = group), 
+               color = "black", 
+               fill = "grey80") + 
+  coord_fixed(1.3, 
+              xlim = c(-120.72, -118.98), 
+              ylim = c(33.8, 34.6)) + 
+  labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
+  geom_point(data=stations, 
+             mapping = aes(x = lon, y = lat), 
+             alpha = 1, 
+             color= "black",
+             size = 2.5,
+             shape = 16) +
+  geom_point(data=hf, mapping = aes(x = lon, y = lat), alpha = 1, 
+             color= "black", bg= "grey", size = 4, shape = 13) +
+  geom_text_repel(data = stations, 
+                  aes(label=station, x=lon, y=lat), 
+                  size=4, 
+                  nudge_x=0.03) +
+  geom_label_repel(data = hf, 
+                  aes(label=radar, x=lon, y=lat), 
+                  size=4, 
+                  nudge_y=0.05) +
+  theme_bw() +
+  theme(axis.text=element_text(size=14), 
+        axis.title=element_text(size=16))
+```
+  
+
 
