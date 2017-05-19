@@ -174,7 +174,7 @@ ggplot() +
         axis.title=element_text(size=16))
 ```
 
-## Adding a legend 
+## Adding a legend NOT WORKING YET
 You need to be able to tell your reader (or your future self for that matter) the meaning of the symbols, so we need to add a legend to our map.
 ```{r}
 ggplot() +
@@ -204,7 +204,11 @@ ggplot() +
                   nudge_y=0.05) +
   theme_bw() +
   theme(axis.text=element_text(size=14), 
-        axis.title=element_text(size=16))
+        axis.title=element_text(size=16),
+        legend.position = "left",
+        legend.text = element_text(size=12),
+        legend.title = element_text(size=16)) +
+  guides(shape = guide_legend(override.aes = list(shape = c(16, 13))))
 ```
  
 ## Adding in bathymetry
