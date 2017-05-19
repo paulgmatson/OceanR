@@ -53,7 +53,11 @@ Now we want to have some spatial points on our map. In this case, we are going t
 ```{r}
 # Create dataframe for station locations
 # This can also be loaded from a csv file
-stations <- data.frame(station = c(seq(1,7,1)), lat = c(34.39158333, 34.34041667, 34.30038333, 34.25096667, 34.20093333, 34.15785, 34.08156667), lon = c(-119.839767, -119.859517, -119.8786, -119.90965, -119.928717, -119.94675, -120.0162))
+stations <- data.frame(type = c(rep("PnB", 7), rep("HFR", 8)), station = c(seq(1,7,1),"ptm1","mgs1","ssd1","sci1","cop1","Rfg1","trl1","ptc1"), 
+                       lat = c(34.39158333, 34.34041667, 34.30038333, 34.25096667, 34.20093333, 34.15785, 34.08156667, 34.0961167, 34.2048833, 
+                               34.4190167, 33.9948333, 34.4078333, 34.4610667, 34.4711333, 34.4483), 
+                       lon = c(-119.839767, -119.859517, -119.8786, -119.90965, -119.928717, -119.94675, -120.0162, -119.1073667, -119.2516333, 
+                               -119.5961167, -119.6311667, -119.8783333, -120.0769833, -120.2322333, -120.4717))
 ```
 
 ## Adding points
@@ -69,11 +73,11 @@ ggplot() +
               ylim = c(33.8, 34.6)) + # sets y limits (should be same as for 'shore')
   labs(x="Longitude (ºW)", y="Latitude (ºN)") + 
   geom_point(data=stations, 
-             mapping = aes(x = lon, y = lat), 
+             mapping = aes(x = lon, y = lat, shape=type, size=type), 
              alpha = 1, 
-             color= "black", # controls color of point 
-             size = 2.5, # controls relative size of point
-             shape = 16) + # controls shape of point
+             color= "black") + # controls color of point 
+  scale_shape_manual(values=c(13,16)) + # controls the symbols used for shape
+  scale_size_manual(values=c(4,2.5)) + # controls the size used for symbols
   geom_text(data = stations, 
                   aes(label=station, x=lon, y=lat), 
                   size=4, # controls text size
@@ -174,7 +178,7 @@ ggplot() +
         axis.title=element_text(size=16))
 ```
 
-## Adding a legend NOT WORKING YET
+## Adding a legend NOT WORKING
 You need to be able to tell your reader (or your future self for that matter) the meaning of the symbols, so we need to add a legend to our map.
 ```{r}
 ggplot() +
